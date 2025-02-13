@@ -1,0 +1,60 @@
+<!--begin::Search-->
+
+<!--begin::User menu-->
+<div class="app-navbar-item" [ngClass]="itemClass">
+  <!--begin::Menu wrapper-->
+  <div class="cursor-pointer symbol" [ngClass]="userAvatarClass" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+    <div *ngIf="isEnableKeycloak;else other_content">
+      <ng-container *ngIf="user$">
+        <div class="menu-item px-3">
+          <div class="menu-content d-flex align-items-center px-3">
+            <div class="symbol symbol-50px me-5">
+              <img alt="Logo" src="./assets/media/avatars/blank.png" />
+            </div>
+
+            <div class="d-flex flex-column">
+              <div class="fw-bolder d-flex align-items-center fs-5">
+                {{ user$.firstName }} {{ user$.lastName }}
+                <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2"
+                  >Pro</span
+                >
+              </div>
+              <a class="fw-bold text-muted text-hover-primary fs-7 cursor-pointer">
+                {{ user$.email }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <ng-template #other_content>
+      <ng-container *ngIf="user2$ | async as _user">
+        <div class="menu-item px-3">
+          <div class="menu-content d-flex align-items-center px-3">
+            <div class="d-flex flex-column">
+              <div class="fw-bolder d-flex align-items-center fs-5">
+                {{ _user.firstname }} {{ _user.lastname }}              
+              </div>
+              <a class="fw-bold text-muted text-hover-primary fs-7 cursor-pointer">
+                {{ _user.email }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-template>
+  </div>
+  <app-user-inner data-kt-menu='true'></app-user-inner>
+  <!--end::Menu wrapper-->
+</div>
+<!--end::User menu-->
+
+<!--begin::Header menu toggle-->
+<ng-container *ngIf="appHeaderDefaulMenuDisplay">
+  <div class="app-navbar-item d-lg-none ms-2 me-n3" title="Show header menu">
+    <div class="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_header_menu_toggle">
+      <app-keenicon name="element-4" class="fs-1" [ngClass]="btnIconClass"></app-keenicon>
+    </div>
+  </div>
+</ng-container>
+<!--end::Header menu toggle-->

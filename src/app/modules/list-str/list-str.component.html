@@ -1,0 +1,440 @@
+<form action="#">
+  <!--begin::Card-->
+  <div class="card mb-7">
+    <!--begin::Card body-->
+    <div class="card-body">
+      <form
+        cForm
+        [formGroup]="searchForm"
+        class="row m-1 g-2"
+        (ngSubmit)="onSearch()"
+      >
+        <!--begin::Compact form-->
+        <div class="">
+          <!--begin::Input group-->
+          <div class="row g-4 mb-2 d-flex align-items-center">
+            <div class="col-lg-4">
+              <label class="fs-6 form-label fw-bold text-gray-900">
+                Mã nội bộ
+              </label>
+              <div class="me-md-2 position-relative">
+                <i
+                  class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 translate-middle ms-6"
+                >
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+                <input
+                  type="text"
+                  class="form-control form-control-solid ps-10"
+                  name="reportNo"
+                  formControlName="reportNo"
+                  [value]="searchForm.controls.reportNo"
+                  placeholder="Tìm theo mã số STR"
+                />
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <!--begin::Row-->
+              <div class="row g-4">
+                <!--begin::Col-->
+                <div class="col-lg-12">
+                  <label class="fs-6 form-label fw-bold text-gray-900"
+                    >Trạng thái</label
+                  >
+                  <!--begin::Select-->
+                  <select
+                    class="form-select form-select-solid"
+                    data-control="select2"
+                    data-placeholder="In Progress"
+                    data-hide-search="true"
+                    name="reportStatus"
+                    formControlName="reportStatus"
+                  >
+                    <option value="" selected="selected">Tất cả</option>
+
+                    <option
+                      *ngFor="
+                        let status of statusList;
+                        index as i;
+                        first as isFirst
+                      "
+                      value="1"
+                    >
+                      {{ status }}
+                    </option>
+                  </select>
+                  <!--end::Select-->
+                </div>
+                <!--end::Col-->
+              </div>
+            </div>
+            <!--begin::Col-->
+            <div class="col-lg-5">
+              <label class="fs-6 form-label fw-bold text-gray-900"
+                >Ngày tạo STR</label
+              >
+              <div class="row">
+                <div class="col-lg-5">
+                  <input
+                    type="date"
+                    class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Ngày cấp"
+                    name="dateFrom"
+                    formControlName="dateFrom"
+                  />
+                </div>
+                <div class="col-lg-1 position-relative">
+                  <span class="position-absolute top-25 start-25">đến</span>
+                </div>
+
+                <div class="col-lg-5">
+                  <input
+                    type="date"
+                    class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Ngày đến"
+                    name="dateTo"
+                    formControlName="dateTo"
+                  />
+                </div>
+              </div>
+            </div>
+            <!--end::Col-->
+
+            <!--end::Row-->
+          </div>
+          <!--end::Input group-->
+        </div>
+        <!--end::Compact form-->
+
+        <!--begin::Advance form-->
+        <div *ngIf="isAdvandSearch">
+          <!--begin::Separator-->
+          <div class="separator separator-dashed mt-9 mb-6"></div>
+          <!--end::Separator-->
+
+          <!--begin::Row-->
+          <div class="row g-8 mb-8">
+            <!--begin::Col-->
+            <div class="col-lg-6">
+              <label class="fs-6 form-label fw-bold text-gray-900">
+                Nộ dung
+              </label>
+              <div class="me-md-2 position-relative">
+                <i
+                  class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 translate-middle ms-6"
+                >
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+                <input
+                  type="text"
+                  class="form-control form-control-solid ps-10"
+                  name="search"
+                  value=""
+                  placeholder="Nội dung key word trong báo cáo"
+                />
+              </div>
+            </div>
+            <!--end::Col-->
+          </div>
+          <!--end::Row-->
+        </div>
+        <!--end::Advance form-->
+
+        <div class="row g-4 mb-2 mt-0 d-flex align-items-center">
+          <!--begin::Col-->
+          <div class="col-lg-6 g-4">
+            <!--begin:Action-->
+            <div class="d-flex align-items-center">
+              <button type="submit" (click)="onSearch()"  class="btn btn-primary me-5">
+                Tìm kiếm
+              </button>
+              <!-- <a
+              [routerLink]=""
+              id="kt_horizontal_search_advanced_link"
+              class="btn btn-link me-4"
+              data-bs-toggle="collapse"
+              (click)="clearSearch()"
+            >
+              <span>Xóa bộ lọc</span>
+            </a> -->
+
+              <a
+                [routerLink]=""
+                id="kt_horizontal_search_advanced_link"
+                class="btn btn-link"
+                data-bs-toggle="collapse"
+                (click)="toggleAdvanceSearch()"
+              >
+                <span *ngIf="!isAdvandSearch">Mở lọc nâng cao</span>
+                <span *ngIf="isAdvandSearch">Ẩn nâng cao</span>
+              </a>
+            </div>
+            <!--end:Action-->
+          </div>
+          <!--end::Col-->
+        </div>
+      </form>
+    </div>
+    <!--end::Card body-->
+  </div>
+  <!--end::Card-->
+</form>
+<!--end::Search-->
+
+<!-- begin::Header -->
+<div class="card col-xl-12 mb-5 mb-xl-8">
+  <div class="card-header align-items-center gap-2 gap-md-5">
+    <!--begin::Card title-->
+    <span  *ngIf="isLoading" class=" btn text-gray-500"> Đang làm mới thông tin</span>
+    <!--end::Card title-->
+    <!--begin::Card toolbar-->
+    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+      <div class="w-100 mw-150px">
+        <!--begin::Select2-->
+        <select
+          class="form-select form-select-solid"
+          data-control="select2"
+          data-hide-search="true"
+          data-placeholder="Status"
+          data-kt-ecommerce-product-filter="status"
+        >
+          <option disabled>Sắp xếp</option>
+          <option value="all" selected>Mới nhất</option>
+          <option value="published">Cũ nhất</option>
+        </select>
+        <!--end::Select2-->
+      </div>
+      <!--begin::Add product-->
+      <a routerLink="/report-str/report-two" class="btn btn-light-success"
+        >Thêm mới STR</a
+      >
+      <!--end::Add product-->
+    </div>
+    <!--end::Card toolbar-->
+  </div>
+
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="card-body pt-0">
+      <!-- <app-crud [datatableConfig]="datatableConfig" route="/apps/users" (deleteEvent)="delete($event)" (editEvent)="edit($event)" (createEvent)="create()" [reload]="reloadEvent" [modal]="formModal"></app-crud> -->
+      <table
+        class="table align-middle table-row-dashed fs-6 gy-5"
+        id="kt_ecommerce_products_table"
+      >
+        <thead>
+          <tr
+            class="text-start text-gray-500 fw-bold fs-7 text-uppercase text-end pe-0"
+          >
+            <th class="w-10px text-end pe-0">
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid me-3"
+              >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  data-kt-check="true"
+                  data-kt-check-target="#kt_ecommerce_products_table .form-check-input"
+                  value="1"
+                />
+              </div>
+            </th>
+            <th class="text-end min-w-100px">Mã Số BC</th>
+            <th class="text-end min-w-100px">Trạng thái</th>
+
+            <th class="text-end min-w-70px">Người duyệt</th>
+            <th class="text-end min-w-70px">Người kiểm duyệt</th>
+            <th class="text-end min-w-70px">Người nhập</th>
+            <th class="text-end min-w-100px">Ngày tạo</th>
+            <th class="text-end min-w-70px">Ngày được kiểm soát</th>
+            <th class="text-end min-w-100px">Ngày được duyệt</th>
+            <th class="text-end min-w-100px">Ngày tiếp nhận</th>
+            <th class="text-end min-w-100px"></th>
+          </tr>
+        </thead>
+      
+        <tbody
+      
+          class="fw-semibold text-gray-800"
+          *ngFor="
+            let record of reportData.records;
+            index as i;
+            first as isFirst
+          "
+        >
+          <tr>
+            <td>
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid"
+              >
+                <input class="form-check-input" type="checkbox" value="1" />
+              </div>
+            </td>
+
+            <td class="text-end pe-0">
+              <span
+                class="text-gray-800 text-hover-primary fw-bold text-end cursor-pointer"
+              >
+                STR-123
+              </span>
+              <!--end::Title-->
+            </td>
+
+            <td class="text-end pe-0" data-order="Inactive">
+              <!--begin::Badges-->
+              <div class="badge badge-light-info">Đang nhập liệu</div>
+              <!--end::Badges-->
+            </td>
+
+            <td class="text-end pe-0" data-order="14">
+              <span class="fw-bold ms-3">Approval 1</span>
+            </td>
+
+            <td class="text-end pe-0">Reviewer 1</td>
+
+            <td class="text-end pe-0" data-order="rating-5">HieuPV</td>
+
+            <td class="text-end pe-0" data-order="Inactive">
+              <!--begin::Badges-->
+              15/01/2025 20:20
+              <!--end::Badges-->
+            </td>
+            <td class="text-end pe-0" data-order="Inactive">
+              15/01/2025 20:20
+            </td>
+            <td class="text-end pe-0" data-order="Inactive">
+              <div class="badge badge-light-danger">15/01/2025 20:20</div>
+            </td>
+            <td class="text-end pe-0">
+              <span class="fw-bold">
+                <div class="badge badge-light-success">
+                  15/01/2025 20:20
+                </div></span
+              >
+            </td>
+            <td class="text-end">
+              <a
+                href="#"
+                class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary"
+                data-kt-menu-trigger="click"
+                data-kt-menu-placement="bottom-end"
+                >Thao tác <i class="ki-duotone ki-down fs-5 ms-1"></i
+              ></a>
+              <!--begin::Menu-->
+              <div
+                class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
+                data-kt-menu="true"
+              >
+                <!--begin::Menu item-->
+                <div class="menu-item px-3">
+                  <a
+                    href="apps/ecommerce/catalog/edit-product.html"
+                    class="menu-link px-3"
+                    >Sửa</a
+                  >
+                </div>
+                <div class="menu-item px-3">
+                  <a
+                    href="apps/ecommerce/catalog/edit-product.html"
+                    class="menu-link px-3"
+                    >In</a
+                  >
+                </div>
+                <!--end::Menu item-->
+                <!--begin::Menu item-->
+                <div class="menu-item px-3">
+                  <a
+                    href="#"
+                    class="menu-link px-3"
+                    data-kt-ecommerce-product-filter="delete_row"
+                    >Xóa</a
+                  >
+                </div>
+                <!--end::Menu item-->
+              </div>
+              <!--end::Menu-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--begin::Pagination-->
+      <div class="d-flex flex-stack flex-wrap pt-10">
+        <div class="fs-6 fw-semibold text-gray-700">
+          Đang hiện 1 đến {{ reportData.pageInfo.pageSize }} của
+          {{ reportData.pageInfo.totalRecord }} dòng
+        </div>
+        <!--begin::Pages-->
+        <ul class="pagination">
+          <li class="page-item previous">
+            <a href="#" class="page-link">
+              <i class="previous"></i>
+            </a>
+          </li>
+          <li class="page-item active">
+            <a href="#" class="page-link">1</a>
+          </li>
+
+          <li class="page-item next">
+            <a href="#" class="page-link">
+              <i class="next"></i>
+            </a>
+          </li>
+        </ul>
+
+        <!--end::Pages-->
+      </div>
+      <!-- end::Table container -->
+    </div>
+  </div>
+  <!-- begin::Body -->
+
+  <ng-template #formModal let-modal>
+    <form #myForm="ngForm" (ngSubmit)="onSubmit($event, myForm)">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          Nhập thông tin mẫu số 1
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+
+      <div class="modal-body scroll-y m-5">component view</div>
+      <div class="modal-footer flex-center">
+        <!--begin::Button-->
+        <button
+          type="reset"
+          id="kt_modal_update_customer_cancel"
+          class="btn btn-light me-3"
+          (click)="modal.dismiss('cancel')"
+        >
+          Discard
+        </button>
+        <!--end::Button-->
+
+        <!--begin::Button-->
+        <button
+          type="submit"
+          id="kt_modal_update_customer_submit"
+          class="btn btn-primary"
+          [attr.data-kt-indicator]="isLoading ? 'on' : 'off'"
+        >
+          <span class="indicator-label"> Submit </span>
+          <span class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+        <!--end::Button-->
+      </div>
+    </form>
+  </ng-template>
+</div>

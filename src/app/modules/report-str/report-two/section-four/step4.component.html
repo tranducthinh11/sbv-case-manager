@@ -1,0 +1,184 @@
+
+<div>
+  <header>
+    <h2 class="modal-title required" id="agency-basic-title">1. Loại báo cáo giao dịch đáng ngờ</h2>
+    <br>
+  </header>
+  <div>
+    <div class="row mb-6">
+      <label class="form-check form-check-inline form-check-solid me-5">
+        <input class="form-check-input" type="checkbox" />
+        <span class="fw-bold ps-2 fs-6">a) Báo cáo giao dịch đáng ngờ theo điểm a khoản 1 Điều 26 Luật Phòng, chống rửa tiền</span>
+      </label>
+    </div>
+    <div class="row mb-6">
+      <label class="col-lg-12 col-form-label fw-bold fs-6">
+        <span class="required">b) Báo cáo giao dịch đáng ngờ theo điểm b khoản 1 Điều 26 Luật Phòng, chống rửa tiền </span>
+      </label>
+    </div>
+    <div class="row mb-6">
+      <label class="form-check form-check-inline form-check-solid me-5">
+        <input class="form-check-input" type="checkbox" />
+        <span class="fw-bold ps-2 fs-6">b1) Dấu hiệu đáng ngờ theo khoản nào của các Điều 27, 28, 29, 30, 31, 32 và 33 Luật Phòng, chống rửa tiền: khoản …………… Điều ………… Luật Phòng, chống rửa tiền</span>
+      </label>
+    </div>
+    <div class="row mb-6">
+      <label class="form-check form-check-inline form-check-solid me-5">
+        <input class="form-check-input" type="checkbox" />
+        <span class="fw-bold ps-2 fs-6">b2) Dấu hiệu đáng ngờ khác do đối tượng báo cáo tự xác định</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="modal-header">
+  <h3 class="modal-title required" id="agency-basic-title">2. Mô tả, phân tích chi tiết lý do báo cáo giao dịch đáng ngờ theo dấu hiệu nêu tại mục 1 phần này</h3>
+  <!-- <button type="button" class="btn-close" aria-label="Close"></button> -->
+</div>
+<div><br><br></div>
+<div class="card-body border-top p-9">
+  <form [formGroup]="addForm" >
+    <div class="row mb-6">
+      <div>
+        <label class="col-lg-12 col-form-label fw-bold fs-6">
+          <span class="required">- Dòng tiền vào liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi có vào tài khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+        </label>
+      </div>
+      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">  <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+              <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+              <th style="width: 10%;">Số tài khoản</th>
+              <th style="width: 10%;">Tên ngân hàng chuyển tiền </th>
+              <th style="width: 10%;">Tổng số tiền(Đ/vị: nghìn đồng)</th>
+              <th style="width: 10%;">Tổng số lượng giao dịch</th>
+              <th style="width: 10%;">Khoảng thời gian giao dịch</th>
+              <th style="width: 10%;">Loại tiền</th>
+              <th style="width: 10%;">Nội dung giao dịch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i"> <td style="text-align: center;">
+                <button class="btn btn-danger btn-sm" >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text" placeholder="Số tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ngan_hang" type="text" placeholder="Ngân hàng" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button type="button" class="btn btn-success" >Thêm</button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div><br></div>
+
+<div class="card-body border-top p-9">
+  <form [formGroup]="addForm" >
+    <div class="row mb-6">
+      <div>
+        <label class="col-lg-12 col-form-label fw-bold fs-6">
+          <span class="required">- Dòng tiền ra liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi nợ vào tài khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+        </label>
+      </div>
+      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">  <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+              <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+              <th style="width: 10%;">Số tài khoản</th>
+              <th style="width: 10%;">Tên ngân hàng chuyển tiền </th>
+              <th style="width: 10%;">Tổng số tiền(Đ/vị: nghìn đồng)</th>
+              <th style="width: 10%;">Tổng số lượng giao dịch</th>
+              <th style="width: 10%;">Khoảng thời gian giao dịch</th>
+              <th style="width: 10%;">Loại tiền</th>
+              <th style="width: 10%;">Nội dung giao dịch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i"> <td style="text-align: center;">
+                <button class="btn btn-danger btn-sm" >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text" placeholder="Số tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ngan_hang" type="text" placeholder="Ngân hàng" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button type="button" class="btn btn-success" >Thêm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer flex-center mt-5">
+      <button type="reset" id="two-1-cancel" class="btn btn-light me-3">
+        Cancel
+      </button>
+      <button type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Submit</span>
+      </button>
+    </div>
+
+  </form>
+</div>

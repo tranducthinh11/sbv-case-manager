@@ -1,0 +1,168 @@
+<div ngbAccordionItem="one-1">
+  <div class="modal-header">
+    <h3 class="modal-title required" id="agency-basic-title">Thông tin về tổ chức có liên quan đến giao dịch</h3>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="card-body border-top p-9">
+    <form #myForm="ngForm">
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label required fw-bold fs-6">a. Tên đầy đủ của tổ chức: </label>
+        <div class="col-lg-8 fv-row">
+          <input type="text" class="form-control form-control-lg form-control-solid"
+            placeholder="Tên đầy đủ của tổ chức" name="three-2-report-name"
+            [(ngModel)]="agencyRelatedOrganization.reportName" />
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label fw-bold fs-6"><span class="">b. Tên tiếng nước ngoài (nếu có):
+          </span></label>
+        <div class="col-lg-8 fv-row">
+          <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tên tiếng nước ngoài"
+            name="three-2-eng-report-name" [(ngModel)]="agencyRelatedOrganization.address" />
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label fw-bold fs-6"><span class="">c. Tên viết tắt (nếu có): </span></label>
+        <div class="col-lg-8 fv-row">
+          <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tên viết tắt"
+            name="three-2-short-report-name" [(ngModel)]="agencyRelatedOrganization.shortName" />
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label required fw-bold fs-6">đ. Địa chỉ: </label>
+        <div class="col-lg-8">
+          <div class="row">
+            <div class="col-lg-4 fv-row">
+              <input type="text" class="
+                        form-control form-control-lg form-control-solid
+                        mb-3 mb-lg-0
+                      " placeholder="Quận/Huyện" name="three-2-address-district"
+                [(ngModel)]="agencyRelatedOrganization.addressDistrict" />
+            </div>
+            <div class="col-lg-4 fv-row">
+              <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tỉnh/Thành phố"
+                name="three-2-address-province" [(ngModel)]="agencyRelatedOrganization.addressProvince" />
+            </div>
+            <div class="col-lg-4 fv-row">
+              <input type="text" class="
+                        form-control form-control-lg form-control-solid
+                        mb-3 mb-lg-0
+                      " placeholder="Quốc gia" name="three-2-address-nation"
+                [(ngModel)]="agencyRelatedOrganization.addressNation" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label fw-bold fs-6 required">
+          e. Giấy phép thành lập số:
+        </label>
+        <div class="col-lg-8">
+          <div class="row">
+            <div class="col-lg-4 fv-row">
+              <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                placeholder="Giấy phép thành lập số" name="three-2-license-number"
+                [(ngModel)]="agencyRelatedOrganization.licenseNumber">
+            </div>
+
+            <div class="col-lg-4 fv-row">
+              <div class="row">
+                <label class="col-lg-3 col-form-label fw-bold fs-6">
+                  Ngày cấp:
+                </label>
+                <div class="col-lg-9 fv-row">
+                  <input type="date" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Ngày cấp" name="three-2-license-create-date"
+                    [(ngModel)]="agencyRelatedOrganization.licenseCreateDate">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 fv-row">
+              <div class="row">
+                <div class="col-lg-12 fv-row">
+                  <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Nơi cấp" name="three-2-license-place"
+                    [(ngModel)]="agencyRelatedOrganization.licensePlace">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label required fw-bold fs-6">
+          g. Mã số doanh nghiệp/Mã số thuế:
+        </label>
+        <div class="col-lg-8">
+          <div class="row">
+            <div class="col-lg-4 fv-row">
+              <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                placeholder="Mã số doanh nghiệp/Mã số thuế" name="three-2-tax-number"
+                [(ngModel)]="agencyRelatedOrganization.taxNumber">
+            </div>
+
+            <div class="col-lg-4 fv-row">
+              <div class="row">
+                <label class="col-lg-3 col-form-label fw-bold fs-6">
+                  Ngày cấp:
+                </label>
+                <div class="col-lg-9 fv-row">
+                  <input type="date" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Ngày cấp" name="three-2-tax-create-date"
+                    [(ngModel)]="agencyRelatedOrganization.taxCreateDate">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 fv-row">
+              <div class="row">
+                <div class="col-lg-12 fv-row">
+                  <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                    placeholder="Nơi cấp" name="three-2-tax-place" [(ngModel)]="agencyRelatedOrganization.taxPlace">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label fw-bold fs-6"><span class="required">i. Số điện thoại liên lạc:
+          </span></label>
+        <div class="col-lg-8 fv-row">
+          <input type="tel" class="form-control form-control-lg form-control-solid" placeholder="Số điện thoại"
+            name="three-2-phone-number" [(ngModel)]="agencyRelatedOrganization.phoneNumber" />
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label fw-bold fs-6"><span class="required">h. Ngành nghề kinh doanh chính:
+          </span></label>
+        <div class="col-lg-8 fv-row">
+          <input type="tel" class="form-control form-control-lg form-control-solid"
+            placeholder="Ngành nghề kinh doanh chính" name="three-2-agency-business"
+            [(ngModel)]="agencyRelatedOrganization.agencyBusiness" />
+        </div>
+      </div>
+
+      <div class="modal-footer flex-center mt-5">
+        <button type="reset" id="agency_add_cancel" class="btn btn-light me-3">
+          Cancel
+        </button>
+        <button type="submit" id="agency_add_submit" class="btn btn-primary" (click)="addRelatedOrganization(myForm)">
+          <span class="indicator-label">
+            Submit
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
