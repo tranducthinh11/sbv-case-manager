@@ -97,7 +97,7 @@ export class STRConstant {
     }
   ];
 
-  public static priorityList: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  public static priorityList: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   // Danh sách điều khoản
   public static conditions = [
@@ -289,7 +289,7 @@ export class STRConstant {
     },
     {
       "code": "DA_TIEP_NHAN",
-      "name": "Đã tiếp nhận"
+      "name": "Đã tiếp nhận STR"
     },
     {
       "code": "CHO_DUYET_TRA_CP",

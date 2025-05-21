@@ -157,7 +157,7 @@ export class PreviewListSTRCaseComponent implements OnInit {
         // Tạo thẻ <a> ẩn để tải file
         const link = document.createElement('a');
         link.href = url;
-        link.download = `document_${this.strModel?.id}.docx`; // Tên file tải về
+        link.download = `${this.strModel?.report_entity_code}_${this.strModel?.payload?.Thong_tin_chung?.so_bao_cao}.docx`; // Tên file tải về (Mã Ngân hàng_Số báo cáo) (ReportEntityCode_SoBaoCao)
         document.body.appendChild(link);
         link.click();
         // Dọn dẹp
