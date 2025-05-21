@@ -117,6 +117,21 @@
         KẾT XUẤT STR
       </button>
 
+      <!-- button xuất báo cáo  -->
+      <button
+        *ngIf=" hasVisibleBtnInPDF()"
+        type="reset"
+        id="two-1-cancel"
+        class="btn me-3"
+        (click)="onPrintDocxCase()"
+      >
+        <app-keenicon
+          name="folder-down"
+          class="fs-1 text-warning"
+        ></app-keenicon>
+        KẾT XUẤT BÁO CÁO
+      </button>
+
     </div>
 
     <div *ngIf=" isDisplayNote" class="text-start flex-start mx-5 mt-4">

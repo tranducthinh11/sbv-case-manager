@@ -129,7 +129,16 @@ export class STRReportListSTRService {
 
   onPrintDocxReport(recordId: string) {
     return this.http.get(
-      // `${this.apiUrl}/report-list/getDocx?id=${recordId}`,
+      `${this.apiUrl}/report-list/getDocx?id=${recordId}`,
+      { headers: this.getHeader(),
+        responseType: 'blob' // Quan trọng: Chỉ định responseType là 'blob'
+       }
+      
+    );
+  }
+
+  onPrintDocxCase(recordId: string) {
+    return this.http.get(
       `${this.apiUrl}/list-case/export?id=${recordId}`,
       { headers: this.getHeader(),
         responseType: 'blob' // Quan trọng: Chỉ định responseType là 'blob'

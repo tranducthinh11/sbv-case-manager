@@ -171,6 +171,33 @@ export class PreviewListSTRCaseComponent implements OnInit {
     
   }
 
+  onPrintDocxCase() {
+    this.isPrinting = true;
+    this.currentStep$.next(2);
+    const content = document.getElementById('printableContent');
+    if (!content) return;
+
+    this.strReportListSTRService.onPrintDocxCase(this.strModel?.id).subscribe({
+      next: (response: Blob) => {
+        // Tạo URL từ Blob
+        const url = window.URL.createObjectURL(response);
+        // Tạo thẻ <a> ẩn để tải file
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${this.strModel?.amld_internal_number}.docx`; // Tên file tải về (Mã số str) (amld_internal_number)
+        document.body.appendChild(link);
+        link.click();
+        // Dọn dẹp
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Lỗi khi tải file:', err);
+      },
+    });
+    
+  }
+
   /** ------------------- **/
   hasVisibleBtnKiemTra() {
     return (
