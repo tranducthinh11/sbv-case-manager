@@ -1,0 +1,63 @@
+<div class="card-body border-top p-9">
+  <form [formGroup]="viewLegalRepresentative" (ngSubmit)="submitViewLegalRepresentative()">
+
+    <div class="container mt-3">
+      <h4 class="text-center mb-4">Danh sách người đại diện của tổ chức</h4>
+      <button type="button" class="btn-close position-absolute top-0 end-0 m-3" (click)="closeModal()"
+        aria-label="Close"></button>
+      <div *ngIf="legalRepresentatives.length > 0; else noData">
+        <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>Họ tên</th>
+              <th>Ngày sinh</th>
+              <th>Nghề nghiệp</th>
+              <th>Chức vụ</th>
+              <th>Số điện thoại</th>
+              <th>Thông tin định danh</th>
+              <th>Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rep of legalRepresentatives">
+              <td>{{ rep.ho_ten }}</td>
+              <td>{{ rep.ngay_sinh | date:'dd-MM-yyyy'}}</td>
+              <td>{{ getNgheNghiep(rep.nghe_nghiep.ma_nghe_nghiep) }}</td>
+              <td>{{ rep.chuc_vu }}</td>
+              <td>{{ rep.so_dien_thoai }}</td>
+              <td>
+                <ul>
+                  <li *ngFor="let info of rep.thong_tin_dinh_danh">
+                    <strong>Loại:</strong> {{ getLoaiDinhDanhText(info.loai_dinh_danh) }} |
+                    <strong>Số:</strong> {{ info.so_dinh_danh }} |
+                    <strong>Ngày cấp:</strong> {{ info.ngay_cap | date:'dd-MM-yyyy'}} |
+                    <strong>Ngày hết hạn:</strong> {{ info.ngay_het_han | date:'dd-MM-yyyy'}} |
+                    <strong>Nơi cấp:</strong> {{ info.noi_cap }} |
+                    <strong>Cơ quan cấp:</strong> {{ info.co_quan_cap }}
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <button *ngIf="!readOnly" class="btn btn-sm btn-primary" type="button" (click)="openEditModal(rep)">Sửa</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noData>
+        <p class="text-muted">Không có người đại diện pháp lý nào.</p>
+      </ng-template>
+    </div>
+
+    <div class="modal-footer flex-center mt-5">
+      <button *ngIf="!readOnly" type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+        Hủy bỏ
+      </button>
+      <button *ngIf="!readOnly" type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -5,7 +5,7 @@ import { KeycloakConfig } from "keycloak-js";
 
 // The list of file replacements can be found in `angular.json`.
 let keycloakConfig: KeycloakConfig = {
-  url: 'http://localhost:8080',
+  url: 'https://kc.amld.vn',
   realm: 'sbv',
   clientId: 'test-client'
 };
@@ -16,15 +16,18 @@ export const environment = {
   keycloakParam: {
     keycloakBaseUrl: 'http://localhost:8080/realms/sbv/protocol/openid-connect/token',
   },
-  enable_keycloak: false,
+  enable_keycloak: true,
   appVersion: 'v8.2.4',
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
   apiUrl: 'api',
+  // homeUri: 'https://amlrs.amld.vn',
+  // apiBaseUrl: 'https://amlrs.amld.vn/strcreator',
   apiBaseUrl: 'http://localhost:8080',
-
-  
+  homeUri: 'http://localhost:4200',
   appThemeName: 'Metronic',
+  maxFileCount: 10,
+  maxFileSize: 15, // MB
   appPurchaseUrl: 'https://1.envato.market/EA4JP',
   appHTMLIntegration:
     'https://preview.keenthemes.com/metronic8/demo1/documentation/base/helpers/flex-layouts.html',

@@ -1,0 +1,14 @@
+<span style="text-wrap: pretty; overflow: hidden;" 
+data-bs-toggle="tooltip"
+data-bs-placement="top"
+(click)="toggle()"
+ >
+
+ <p *ngIf="!displayAll" style="color: #625e5e;">
+    <span style="color: black;">{{this.titleName}} : </span> {{ (label?.slice(label?.length - maxLength <= 0 ? 0: label?.length - maxLength, label?.length ))  + (label?.length > maxLength? "...": "") }} 
+</p>
+
+<p *ngIf="displayAll" style="color: #625e5e;">
+    <span style="color: black;">{{this.titleName}} : </span> {{label}}
+</p>
+</span>

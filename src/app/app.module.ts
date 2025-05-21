@@ -1,7 +1,7 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -12,12 +12,14 @@ import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ToastrModule } from 'ngx-toastr';
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule
 import { KeycloakService } from 'keycloak-angular';
+import { AuthInterceptor } from './modules/list-str/services/auth.interceptor';
 
 // #fake-end#
 
@@ -60,6 +62,11 @@ function appInitializer(authService: AuthService) {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 10000,  // Thời gian hiển thị (10s)
+      positionClass: 'toast-top-right', // Vị trí hiển thị
+      preventDuplicates: true, // Tránh hiển thị trùng
+    }), 
     HttpClientModule,
     ClipboardModule,
     // #fake-start#
@@ -74,22 +81,26 @@ function appInitializer(authService: AuthService) {
     InlineSVGModule.forRoot(),
     NgbModule,
     SweetAlert2Module.forRoot(),
+
   ],
   providers: [
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: kcInitializer,
-    //   multi: true,
-    //   deps: [KeycloakService],
-    // },
     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializer,
+      useFactory: kcInitializer,
       multi: true,
-      deps: [AuthService],
+      deps: [KeycloakService],
     },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: appInitializer,
+    //   multi: true,
+    //   deps: [AuthService],
+    // },
     KeycloakService,
     provideAnimationsAsync(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+
+    { provide: LOCALE_ID, useValue: 'vi' }
   ],
   bootstrap: [AppComponent],
 })

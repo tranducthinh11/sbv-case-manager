@@ -8,58 +8,29 @@ import { Organization } from '../models/organization';
   providedIn: 'root',
 })
 export class OrganizationService {
-  private static readonly OrganizationsStorageKey = 'to_chuc_lien_quan';
-
-  private currentOrganization!: Organization | null;
-  private currentOrganizationSubject: BehaviorSubject<Organization | null> = new BehaviorSubject<Organization | null>(null);
   private organizations: Organization[] = [];
-  private filteredOrganizations: Organization[] = [];
-  private organizationsSubject: BehaviorSubject<Organization[]> = new BehaviorSubject<Organization[]>([]);
-  private lengthOrganizationsSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
-  organizations$: Observable<Organization[]> = this.organizationsSubject.asObservable();
-  lengthOrganizations$: Observable<number> = this.lengthOrganizationsSubject.asObservable();
-  currentOrganization$: Observable<Organization | null> = this.currentOrganizationSubject.asObservable();
+  private organizationListSubject = new BehaviorSubject<Organization[]>([]);
+  organizationList$ = this.organizationListSubject.asObservable();
 
   constructor(private storageService: LocalStorageService, private router: Router) {
 
   }
 
-  fetchDataFromLocalStorage() {
-    this.organizations = this.storageService.getValue<Organization[]>(OrganizationService.OrganizationsStorageKey) || [];
-    this.filteredOrganizations = [...this.organizations];
-    this.currentOrganization = this.storageService.getValue<Organization>('currentOrganization') || null;
-    this.updateData();
+  clear() {
+    this.organizationListSubject.next(null)
   }
 
-  updateToLocalStorage() {
-    this.storageService.setObject(OrganizationService.OrganizationsStorageKey, this.organizations);
-    this.filterOrganizations(null, false);
-    this.updateData();
+  setOrganization(organizations: Organization[]) {
+    this.organizationListSubject.next(organizations);
   }
 
-  importDataFromFile(organizations: Organization[]) {
-    this.organizations = organizations;
-    this.updateToLocalStorage();
+  addOrganization(organization: Organization) {
+    const currentOrganizations = this.organizationListSubject.getValue();
+    this.organizationListSubject.next([...currentOrganizations, organization]);
   }
 
-  addOrganization(organization : Organization): Boolean {
-
-    this.organizations.unshift(organization);
-    this.updateToLocalStorage();
-    return true;
-  }
-
-  updateOrganization(id: number | undefined, data: Organization) {
-    // const index = this.organizations.findIndex((organizations) => origin.id === id);
-    // this.organizations.splice(index, 1, data);
-    this.updateToLocalStorage();
-  }
-
-  deleteOrganization(id: number | undefined) {
-    const index = this.organizations.findIndex((organization) => organization.id === id);
-    this.organizations.splice(index, 1);
-    this.updateToLocalStorage();
+  getOrganizations(): Organization[] {
+    return this.organizationListSubject.getValue();
   }
 
   getOrganizationByID(id: number | undefined): Observable<Organization | null> {
@@ -67,18 +38,34 @@ export class OrganizationService {
     return of(organization).pipe(delay(500));
   }
 
-  filterOrganizations(key: string | null, isFiltering: boolean = true) {
-    this.filteredOrganizations = [...this.organizations];
-    if (isFiltering) {
-      this.updateData();
+  updateOrganization(updatedOrganization: Organization) {
+    const currentOrganizations = this.organizationListSubject.getValue();
+    const updatedOrganizations = currentOrganizations.map(organization =>
+      organization.id === updatedOrganization.id ? updatedOrganization : organization
+    );
+    this.organizationListSubject.next(updatedOrganizations);
+  }
+
+  deleteOrganization(id: number | undefined) {
+    if (id === undefined) return;
+    const currentOrganizations = this.organizationListSubject.getValue();
+    const updatedOrganizations = currentOrganizations.filter(organization => organization.id !== id);
+    this.organizationListSubject.next(updatedOrganizations);
+  }
+
+  addOrUpdateOrganization(organization: Organization) {
+      const currentOrganization = this.organizationListSubject.getValue();
+      const index = currentOrganization.findIndex(o => o.id === organization.id);
+    
+      let updatedOrganizations: Organization[];
+      if (index !== -1) {
+        // Đã tồn tại → cập nhật
+        updatedOrganizations = [...currentOrganization];
+        updatedOrganizations[index] = organization;
+      } else {
+        // Không tồn tại → thêm mới
+        updatedOrganizations = [...currentOrganization, organization];
+      }
+      this.organizationListSubject.next(updatedOrganizations);
     }
-  }
-
-  private updateData() {
-    this.currentOrganizationSubject?.next(this.currentOrganization);
-    this.organizationsSubject.next(this.filteredOrganizations);
-    this.lengthOrganizationsSubject.next(this.organizations.length);
-  }
-
-
 }

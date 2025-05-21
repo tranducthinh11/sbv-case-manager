@@ -37,6 +37,7 @@
     "clipboard": "2.0.11",
     "datatables.net": "^2.0.4",
     "datatables.net-bs5": "^2.0.4",
+    "demo1": "file:",
     "jquery": "^3.6.0",
     "keycloak-angular": "^16.1.0",
     "keycloak-js": "^26.0.7",

@@ -1,0 +1,285 @@
+<div class="modal-header">
+    <h3 class="modal-title required" id="agency-basic-title">Màn hình dòng tiền cá nhân liên quan đến giao dịch
+    </h3>
+    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+
+<div class="card-body border-top p-9">
+    <form [formGroup]="addTransactionForm" (ngSubmit)="addTransactionSubmit()">
+
+        <div class="col-lg-12 py-5">
+            <div class="row">
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>Chọn người:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <select class="form-control form-control-lg form-control-solid"
+                            (change)="onTransactionSelect($event)">
+                            <option value="">-- Chọn người --</option>
+                            <option *ngFor="let transaction of transactionList" [value]="transaction.id">
+                                {{ transaction.ho_ten }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 py-5">
+            <div class="row">
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>a. Họ và tên:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Họ và tên" formControlName="ten_doi_tuong" [readOnly]="readOnly" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>b. Số định danh:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Số định danh" formControlName="so_dinh_danh" [readOnly]="readOnly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 py-5">
+            <div class="row">
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>c. Tổng số tiền vào:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Tổng số tiền vào" formControlName="tong_so_tien_vao" [readOnly]="readOnly" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>d. Tổng số giao dịch vào:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Tổng số giao dịch vào" formControlName="tong_so_giao_dich_vao" [readOnly]="readOnly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 py-5">
+            <div class="row">
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>e. Tổng số tiền ra:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Tổng số tiền ra" formControlName="tong_so_tien_ra" [readOnly]="readOnly" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-flex align-items-center">
+                    <label class="col-lg-4 col-form-label fw-bold me-2"><span>f. Tổng số giao dịch ra:</span></label>
+                    <div class="col-lg-8 flex-grow-1 fv-row">
+                        <input type="text" class="form-control form-control-lg form-control-solid"
+                            placeholder="Tổng số giao dịch ra" formControlName="tong_so_giao_dich_ra" [readOnly]="readOnly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div><br></div>
+
+        <div class="card-body border-top p-9">
+            <div class="row mb-6">
+                <div>
+                    <label class="col-lg-12 col-form-label fw-bold fs-6">
+                        <span class="required">- Dòng tiền vào liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi
+                            có vào tài
+                            khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+                    </label>
+                </div>
+                <div class="col-lg-12 fv-row" formArrayName="dong_tien_vao">
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;"></th>
+                                <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+                                <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+                                <th style="width: 10%;">Số tài khoản</th>
+                                <th style="width: 10%;">Tên ngân hàng chuyển tiền</th>
+                                <th style="width: 10%;">Mã ngân hàng chuyển tiền</th>
+                                <th style="width: 10%;">Tổng số tiền</th>
+                                <th style="width: 10%;">Tổng số tiền quy đổi</th>
+                                <th style="width: 10%;">Tổng số lượng giao dịch</th>
+                                <th style="width: 10%;">Giao dịch từ ngày</th>
+                                <th style="width: 10%;">Giao dịch đến ngày</th>
+                                <th style="width: 10%;">Loại tiền</th>
+                                <th style="width: 10%;">Nội dung giao dịch</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bankAccount of bankAccountIns.controls; let i = index;" [formGroupName]="i">
+                                <td style="text-align: center;">
+                                    <button class="btn btn-danger btn-sm" type="button" (click)="deleteBankIn(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ho_ten_nguon"
+                                        type="text" placeholder="Họ và tên" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="so_dinh_danh_nguon"
+                                        type="text" placeholder="Số CMND/ CCCD/ Hộ chiếu" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="so_tai_khoan_nguon"
+                                        type="text" placeholder="Số tài khoản" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ten_ngan_hang_nguon"
+                                        type="text" placeholder="Tên ngân hàng chuyền tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ma_ngan_hang_nguon"
+                                        type="text" placeholder="Mã ngân hàng chuyền tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_tien"
+                                        type="number" placeholder="Tổng số tiền"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_tien_quy_doi"
+                                        type="number" placeholder="Tổng tiền quy đổi"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_luong_giao_dich"
+                                        type="number" placeholder="Tổng số lượng giao dịch"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="giao_dich_tu_ngay"
+                                        type="date" placeholder="Giao dịch từ ngày" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="giao_dich_den_ngay"
+                                        type="date" placeholder="Giao dịch đến ngày" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="noi_dung" type="text"
+                                        placeholder="Nội dung" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-success" (click)="addRowIn()">Thêm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body border-top p-9">
+            <div class="row mb-6">
+                <div>
+                    <label class="col-lg-12 col-form-label fw-bold fs-6">
+                        <span class="required">- Dòng tiền ra liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi có
+                            vào tài
+                            khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+                    </label>
+                </div>
+                <div class="col-lg-12 fv-row" formArrayName="dong_tien_ra">
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;"></th>
+                                <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+                                <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+                                <th style="width: 10%;">Số tài khoản</th>
+                                <th style="width: 10%;">Tên ngân hàng chuyển tiền</th>
+                                <th style="width: 10%;">Mã ngân hàng chuyển tiền</th>
+                                <th style="width: 10%;">Tổng số tiền</th>
+                                <th style="width: 10%;">Tổng số tiền quy đổi</th>
+                                <th style="width: 10%;">Tổng số lượng giao dịch</th>
+                                <th style="width: 10%;">Giao dịch từ ngày</th>
+                                <th style="width: 10%;">Giao dịch đến ngày</th>
+                                <th style="width: 10%;">Loại tiền</th>
+                                <th style="width: 10%;">Nội dung giao dịch</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bankAccount of bankAccountIns.controls; let i = index;" [formGroupName]="i">
+                                <td style="text-align: center;">
+                                    <button class="btn btn-danger btn-sm" type="button" (click)="deleteBankIn(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ho_ten_dich"
+                                        type="text" placeholder="Họ và tên" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="so_dinh_danh_dich"
+                                        type="text" placeholder="Số CMND/ CCCD/ Hộ chiếu" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="so_tai_khoan_dich"
+                                        type="text" placeholder="Số tài khoản" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ten_ngan_hang_dich"
+                                        type="text" placeholder="Tên ngân hàng chuyền tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="ma_ngan_hang_dich"
+                                        type="text" placeholder="Mã ngân hàng chuyền tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_tien"
+                                        type="number" placeholder="Tổng số tiền"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_tien_quy_doi"
+                                        type="number" placeholder="Tổng tiền quy đổi"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="tong_so_luong_giao_dich"
+                                        type="number" placeholder="Tổng số lượng giao dịch"/>
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="giao_dich_tu_ngay"
+                                        type="date" placeholder="Giao dịch từ ngày" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="giao_dich_den_ngay"
+                                        type="date" placeholder="Giao dịch đến ngày" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" formControlName="noi_dung" type="text"
+                                        placeholder="Nội dung" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-success" (click)="addRowOut()">Thêm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal-footer flex-center mt-5">
+            <button type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+                Hủy bỏ
+            </button>
+            <button type="submit" id="two-1-submit" class="btn btn-primary">
+                <span class="indicator-label">Lưu</span>
+            </button>
+        </div>
+
+    </form>
+</div>

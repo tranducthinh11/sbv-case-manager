@@ -4,6 +4,7 @@ import { ReportStrComponent } from './report-str.component';
 import { ReportOneComponent } from './report-one/report-one.component';
 import { ReportTwoComponent } from './report-two/report-two.component';
 import { Auth } from '../auth/services/guard';
+import { UserRole } from 'src/app/common/role.constant';
 
 
 
@@ -16,13 +17,13 @@ const routes: Routes = [
         path: 'report-one',
         canActivate: [Auth],
         component: ReportOneComponent,
-        data: { roles: ['reviewer']}
+        data: { roles: [UserRole.INPUTER]}
       },
       {
         path: 'report-two',
         canActivate: [Auth],
         component: ReportTwoComponent,
-        data: { roles: ['inputer'] }
+        data: { roles: [UserRole.INPUTER] }
       },
       
       { path: '', redirectTo: 'report-one', pathMatch: 'full' },

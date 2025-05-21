@@ -5,13 +5,6 @@ const Routing: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
-
-  {
-    path: 'report-str',
-    loadChildren: () => import('../modules/report-str/report-str.module').then((m) => m.ReportStrModule),
-    // data: { layout: 'dark-header' },
-  },
-
   {
     path: 'list-str',
     loadChildren: () => import('../modules/list-str/list-str.module').then((m) => m.ListStrModule),
@@ -20,6 +13,17 @@ const Routing: Routes = [
     path: 'list-str-case',
     loadChildren: () => import('../modules/list-str-case/list-str-case.module').then((m) => m.ListStrCaseModule),
   },
+  {
+    path: 'assignment',
+    loadChildren: () => import('../modules/assignment/assignment.module').then((m) => m.AssignmentModule),
+  },
+  {
+    path: 'report-str',
+    loadChildren: () => import('../modules/report-str/report-str.module').then((m) => m.ReportStrModule),
+    // data: { layout: 'dark-header' },
+  },
+
+
   {
     path: 'history-str',
     loadChildren: () => import('../modules/history/history.module').then((m) => m.HistoryModule),

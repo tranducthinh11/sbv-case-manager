@@ -84,4 +84,8 @@ export class AuthHTTPService {
   getAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(API_USERS_URL);
   }
+
+  getUserRole(email: string): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}/api/case/role?email=${email}`);
+  }
 }

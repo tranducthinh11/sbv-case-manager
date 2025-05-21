@@ -10,3 +10,34 @@
 @import "./assets/plugins/keenicons/duotone/style.css";
 @import "./assets/plugins/keenicons/outline/style.css";
 @import "./assets/plugins/keenicons/solid/style.css";
+
+.absolute {
+    position: absolute;
+}
+
+// datepicker
+.calendar-icon {
+    border: 1px solid var(--bs-gray-300);
+    border-radius: 0 0.475rem 0.475rem 0;
+}
+
+.ngb-dp-arrow {
+    flex: none !important;
+}
+
+.ngb-dp-month:first-child .ngb-dp-week {
+    padding-left: .5rem !important;
+}
+
+.ngb-dp-month:last-child .ngb-dp-week {
+    padding-right: .5rem !important;
+}
+
+.ngb-dp-header .btn-link {
+    padding: 0 !important;
+}
+
+.ngb-dp-header .form-select {
+    background-position: right center !important;
+}
+//

@@ -9,6 +9,6 @@ export class AuthorizedPersonInformation {
     this.id = data.id;
     this.ho_ten = data.ho_ten;
     this.quan_he_voi_chu_tai_khoan = data.quan_he_voi_chu_tai_khoan;
-    this.thong_tin_dinh_danh = data.thong_tin_dinh_danh;
+    this.thong_tin_dinh_danh = Array.isArray(data.thong_tin_dinh_danh) ? data.thong_tin_dinh_danh.map((item: any) => new PersonallyIdentifiableInformation(item)) : [];
   }
 }

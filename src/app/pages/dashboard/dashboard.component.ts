@@ -6,6 +6,8 @@ import { DasBoardService } from './service/dashboard.service';
 import { HttpResponse } from '@angular/common/http';
 import { CountModel, DashboardResponse } from './model/dashboard.model';
 import { AuthService } from 'src/app/modules/auth';
+import { STRConstant } from 'src/app/common/str-case.constant';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,9 +28,11 @@ export class DashboardComponent implements OnInit{
   //allListStr: any[] = DashBoardData.allListStr;
   myListStr: CountModel[] ;
   allListStr:  CountModel[] ;
+  listStatus: any[] = STRConstant.statusList;
   constructor(
     private dashboardService: DasBoardService,
-    private  authService: AuthService
+    private  authService: AuthService,
+    private router: Router
   ) {
 
   }
@@ -39,14 +43,14 @@ export class DashboardComponent implements OnInit{
   }
 
   search(){
-    const userId = 1;
-    const userType = 'I';
-    //const userId = this.authService.getUserIDLogin();
+    //const userId = 1;
+    //const userType = 'I';
+    const userId = this.authService.getUserLogin();
     //const userType = this.authService.getUserType();
     this.isLoading = true;
     this.dashboardService.getDashBoard({
       userId: userId,
-      userType: userType
+      userType: ''
     }).subscribe({
       next: (res: HttpResponse<DashboardResponse>) => {
         this.isLoading = false;
@@ -58,35 +62,85 @@ export class DashboardComponent implements OnInit{
   };
 
   private onSearchSuccess(res: DashboardResponse | null): void {
-    console.log('Data Dashboard ', res?.myList);
-    this.myListStr =  res?.myList ;
-    this.allListStr =  res?.summary ;
+    
+    this.myListStr =  res?.myList;
+    this.allListStr =  res?.summary;
+  }
+  
+  // private sortList(listStr:any){
+  //   let result= [];
+  //   if(listStr.length  <= 0){
+  //     return;
+  //   }
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'DANG_NHAP_LIEU'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //   }
+
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'CHO_KIEM_SOAT'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'KIEM_SOAT_CHUA_DAT'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'CHO_DUYET'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'DA_GUI'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'KHONG_PHE_DUYET'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'PCRT_XAC_NHAN'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+  //     for (let a of listStr) {
+  //       if (a.creation_status === 'PCRT_HOAN'){
+  //         result.push(a);
+  //       }; 
+  //       break;
+  //     }
+  //     return result;
+  // }
+
+  toListStr(status: string){
+    const userId = this.authService.getUserLogin();
+    const userType = this.authService.getUserType();
+    this.router.navigate(['/list-str',{filterBy:'myList', status:status }]);
+    
+
   }
 
-  getNameStatus(value: number){
-    if(value == 1){
-      return 'Đang nhập liệu';
+  getNameStatus(value: string) {
+    let obj = this.listStatus.find(o => o.code === value); 
+    if(obj!== undefined && obj !== null){
+      return obj.name;
     }
-    if(value == 2){
-      return 'Chờ kiểm soát';
-    }
-    if(value == 3){
-      return 'Kiểm soát chưa đạt';
-    }
-    if(value == 4){
-      return 'Chờ duyệt';
-    }
-    if(value == 5){
-      return 'Đã gửi cục PCRT';
-    }
-    if(value == 6){
-      return 'Không phê duyệt';
-    }
-    if(value == 7){
-      return 'PCRT xác nhận';
-    }
-    if(value == 8){
-      return 'PCRT hoàn';
-    }
+    return '';
+    
   }
+  
 }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MenuItemService } from './menu-item.service';
+import { CommonService } from './common.service';
 
-describe('MenuItemService', () => {
-  let service: MenuItemService;
+describe('CommonService', () => {
+  let service: CommonService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MenuItemService);
+    service = TestBed.inject(CommonService);
   });
 
   it('should be created', () => {

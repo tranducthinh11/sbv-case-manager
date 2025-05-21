@@ -1,0 +1,423 @@
+<div class="modal-header">
+  <h3 class="modal-title required" id="agency-basic-title">Thông tin về tổ chức thực hiện giao dịch</h3>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+<div class="card-body border-top p-9">
+  <form [formGroup]="addFormOrganization" (ngSubmit)="addOrganizationSubmit()">
+
+    <div class="col-lg-12 py-5">
+      <div class="col-lg-12 d-flex align-items-center">
+        <label class="col-lg-2 col-form-label fw-bold me-2">
+          <span class="required">Chọn khách hàng :</span>
+        </label>
+        <div class="col-lg-10 flex-grow-1 fv-row">
+          <select class="form-select form-select-solid form-select-lg mb-3 mb-lg-0" formControlName="khach_hang_hien_huu">
+            <option value="1">Khách hàng đã và đang sử dụng dịch vụ, sản phẩm do tổ chức tín dụng cung cấp.</option>
+            <option value="0">Khác (các trường hợp tổ chức tín dụng không có đầy đủ thông tin theo yêu cầu về cá nhân, tổ chức thực hiện giao dịch đáng ngờ).</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="required">a. Tên đầy đủ của tổ
+              chức:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+              placeholder="Tên đầy đủ của tổ chức" formControlName="ten_to_chuc" />
+            <div
+              *ngIf="addFormOrganization.get('ten_to_chuc')?.invalid && addFormOrganization.get('ten_to_chuc')?.touched"
+              class="text-danger">
+              Tên tổ chức không được để trống
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="">b. Tên tiếng nước ngoài (nếu
+              có):</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+              placeholder="Tên tiếng nước ngoài" formControlName="ten_tieng_nuoc_ngoai" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>c. Tên viết tắt (nếu có):
+            </span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tên viết tắt"
+              formControlName="ten_viet_tat" />
+          </div>
+        </div>
+
+        <!-- <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="required">g. Loại hình tổ chức:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <select class="form-select form-select-solid form-select-lg fw-bold" formControlName="loai_hinh_to_chuc">
+              <option *ngFor="let type of typeOrganization" [value]="type.code">
+                {{ type.name }}
+              </option>
+            </select>
+
+            <div
+              *ngIf="addFormOrganization.get('loai_hinh_to_chuc')?.invalid && addFormOrganization.get('loai_hinh_to_chuc')?.touched"
+              class="text-danger">
+              Loại hình tổ chức không được để trống
+            </div>
+          </div>
+        </div> -->
+
+        <div class="col-lg-6 d-flex align-items-center" formGroupName="loai_hinh_to_chuc">
+          <label class="col-lg-4 col-form-label fw-bold fs-6 required">
+            <span>g. Loại hình tổ chức:</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-select form-select-solid form-select-lg fw-bold" formControlName="ma_loai_hinh"
+              (change)="updateTypeOrganization($event)">
+              <option *ngFor="let type of typeOrganization" [value]="type.value">
+                {{ type.name }}
+              </option>
+            </select>
+            <div class="text-danger mt-1" *ngIf="addFormOrganization.get('loai_hinh_to_chuc.ma_loai_hinh')?.invalid &&
+                     addFormOrganization.get('loai_hinh_to_chuc.ma_loai_hinh')?.touched">
+              Loại hình tổ chức không được để trống
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div formGroupName="dia_chi">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label required fw-bold fs-6">h. Địa chỉ:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid
+                  mb-3 mb-lg-0" placeholder="Số nhà" formControlName="so_nha" />
+                <div
+                  *ngIf="addFormOrganization.get('dia_chi.so_nha')?.invalid && addFormOrganization.get('dia_chi.so_nha')?.touched"
+                  class="text-danger">
+                  Số nhà không được để trống
+                </div>
+              </div>
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Quận/Huyện"
+                  formControlName="quan_huyen" />
+                <div
+                  *ngIf="addFormOrganization.get('dia_chi.quan_huyen')?.invalid && addFormOrganization.get('dia_chi.quan_huyen')?.touched"
+                  class="text-danger">
+                  Quận huyện không được để trống
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6"></label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tỉnh/Thành phố"
+                  formControlName="tinh_thanh" />
+                <div
+                  *ngIf="addFormOrganization.get('dia_chi.tinh_thanh')?.invalid && addFormOrganization.get('dia_chi.tinh_thanh')?.touched"
+                  class="text-danger">
+                  Tỉnh thành không được để trống
+                </div>
+              </div>
+              <div class="col-lg-6 fv-row">
+                <select class="form-select form-select-solid form-select-lg fw-bold" formControlName="quoc_gia">
+                  <option *ngFor="let country of countries" [value]="country.code">
+                    {{ country.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="addFormOrganization.get('dia_chi.quoc_gia')?.invalid && addFormOrganization.get('dia_chi.quoc_gia')?.touched"
+                  class="text-danger">
+                  Quốc gia không được để trống
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="giay_phep_thanh_lap">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">đ. Giấy phép thành lập số:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control required form-control-lg form-control-solid mb-3 mb-lg-0"
+                  placeholder="Giấy phép thành lập" formControlName="so_giay_phep" />
+
+              </div>
+              <div class="col-lg-4 fv-row">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    placeholder="dd/mm/yyyy"
+                    [minDate]="minDate"
+                    [maxDate]="nowDate"
+                    ngbDatepicker
+                    formControlName="ngay_cap"
+                    #ds="ngbDatepicker"
+                    (click)="ds.toggle()"
+                    autocomplete="off"
+                  />
+                  <div class="input-group-append calendar-icon">
+                    <button class="btn btn-outline-secondary" (click)="ds.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                  placeholder="Nơi cấp" formControlName="noi_cap" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="ma_so_doanh_nghiep">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6 required">e. MS doanh nghiệp/MS thuế:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                  placeholder="MS doanh nghiệp/MS thuế (*)" formControlName="ma_so" />
+                <div
+                  *ngIf="addFormOrganization.get('ma_so_doanh_nghiep.ma_so')?.invalid && addFormOrganization.get('ma_so_doanh_nghiep.ma_so')?.touched"
+                  class="text-danger">
+                  MST phải có định dạng 10 số hoặc 13 số (phải có dấu -)
+                </div>
+              </div>
+              <div class="col-lg-4 fv-row">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    placeholder="dd/mm/yyyy"
+                    [minDate]="minDate"
+                    [maxDate]="nowDate"
+                    ngbDatepicker
+                    formControlName="ngay_cap"
+                    #dd="ngbDatepicker"
+                    (click)="dd.toggle()"
+                    autocomplete="off"
+                  />
+                  <div class="input-group-append calendar-icon">
+                    <button class="btn btn-outline-secondary" (click)="dd.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                  placeholder="Nơi cấp" formControlName="noi_cap" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-start">
+          <label class="col-lg-4 col-form-label fw-bold me-2 required">
+            <span>h. Ngành nghề kinh doanh chính:</span>
+          </label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Ngành nghề kinh doanh chính"
+              formControlName="nganh_nghe_kinh_doanh"
+            />
+            <div class="text-danger mt-1"
+                 *ngIf="addFormOrganization.get('nganh_nghe_kinh_doanh').invalid && addFormOrganization.get('nganh_nghe_kinh_doanh').touched">
+              Ngành nghề kinh doanh không được để trống
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="required">i. Số điện thoại liên
+              lạc:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+              placeholder="Số điện thoại liên lạc" formControlName="so_dien_thoai" />
+            <div class="text-danger mt-1"
+              *ngIf="addFormOrganization.get('so_dien_thoai').invalid && addFormOrganization.get('so_dien_thoai').touched">
+              Số điện thoại không được để trống
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="">k. Địa chỉ trang thông tin điện tử của
+              doanh nghiệp (tổ chức):</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+              placeholder="Địa chỉ trang thông tin điện tử" formControlName="website" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-6">
+      <label class="col-lg-2 col-form-label fw-bold fs-6 required"><span>m. Danh sách các số tài khoản:</span></label>
+      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">
+        <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 15%;" class="required">Số tài khoản</th>
+              <th style="width: 14%;" class="required">Mã NH</th>
+              <th style="width: 14%;" class="required">Tên NH</th>
+              <th style="width: 10%;" class="required">Loại tiền</th>
+              <th style="width: 10%;" class="required">Loại tài khoản</th>
+              <th style="width: 10%;" class="required">Ngày mở tài khoản</th>
+              <th style="width: 10%;" class="required">Trạng thái</th>
+              <th style="width: 16%;">Người được ủy quyền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i">
+              <td style="text-align: center;">
+                <button class="btn btn-danger btn-sm" (click)="deleteRow(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text"
+                  placeholder="Số tài khoản" />
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.controls[i].get('so_tai_khoan').invalid && bankAccounts.controls[i].get('so_tai_khoan').touched">
+                  Số tài khoản không được để trống
+                </div>
+              </td>
+              <!-- Mã ngân hàng -->
+              <td>
+                <div formGroupName="ngan_hang">
+                  <input class="form-control form-control-sm" formControlName="ma_ngan_hang" type="text"
+                    placeholder="Mã NH" />
+                </div>
+                <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').invalid &&
+                            bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').touched">
+                  Mã NH không được trống
+                </div>
+              </td>
+
+              <!-- Tên ngân hàng -->
+              <td>
+                <div formGroupName="ngan_hang">
+                  <input class="form-control form-control-sm" formControlName="ten_ngan_hang" type="text"
+                    placeholder="Tên NH" />
+                </div>
+                <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').invalid &&
+                            bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').touched">
+                  Tên NH không được trống
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tien">
+                  <option *ngFor="let currency of currencys" [value]="currency.code"
+                    [selected]="currency.code === 'VND'">
+                    {{ currency.code + ' - ' + currency.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.controls[i].get('loai_tien').invalid && bankAccounts.controls[i].get('loai_tien').touched">
+                  Loại tiền không được để trống
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tai_khoan">
+                  <option *ngFor="let type of typeAccounts" [value]="type.value">
+                    {{ type.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.controls[i].get('loai_tai_khoan').invalid && bankAccounts.controls[i].get('loai_tai_khoan').touched">
+                  Loại tài khoản không được để trống
+                </div>
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="ngay_mo"
+                  #ngaymo="ngbDatepicker"
+                  (click)="ngaymo.toggle()"
+                  autocomplete="off"
+                />
+                <div class="text-danger mt-1"
+                *ngIf="bankAccounts.controls[i].get('ngay_mo').invalid && bankAccounts.controls[i].get('ngay_mo').touched">
+                Ngày mở không được để trống
+              </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="trang_thai">
+                  <option *ngFor="let type of typeStatus" [value]="type.value">
+                    {{ type.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.controls[i].get('trang_thai').invalid && bankAccounts.controls[i].get('trang_thai').touched">
+                  Trạng thái không được để trống
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-flex" (click)="createInformationAccount(i)">Thêm</button>
+                <button type="button" class="btn btn-flex" (click)="viewInformationAccount(i)">Xem ({{ bankAccount.get('nguoi_duoc_uy_quyen').value?.length || 0 }})</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button type="button" class="btn btn-success" (click)="addRow()">Thêm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer flex-center mt-5">
+      <button type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+        Hủy bỏ
+      </button>
+      <button type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -8,73 +8,59 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class PersonService {
-  private static readonly PersonsStorageKey = 'ca-nhan-lien-quan';
+  private personListSubject = new BehaviorSubject<Person[]>([]);
+  personList$ = this.personListSubject.asObservable();
 
-  private currentPerson!: Person | null;
-  private currentPersonSubject: BehaviorSubject<Person | null> = new BehaviorSubject<Person | null>(null);
-  private persons: Person[] = [];
-  private filteredPersons: Person[] = [];
-  private personsSubject: BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
-  private lengthPersonsSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  constructor() { }
 
-  persons$: Observable<Person[]> = this.personsSubject.asObservable();
-  lengthPersons$: Observable<number> = this.lengthPersonsSubject.asObservable();
-  currentPerson$: Observable<Person | null> = this.currentPersonSubject.asObservable();
-
-  constructor(private storageService: LocalStorageService, private router: Router) {}
-
-  fetchDataFromLocalStorage() {
-    this.persons = this.storageService.getValue<Person[]>(PersonService.PersonsStorageKey) || [];
-    this.filteredPersons = [...this.persons];
-    this.currentPerson = this.storageService.getValue<Person>('currentPerson') || null;
-    this.updateData();
+  clear() {
+    this.personListSubject.next(null)
   }
 
-  updateToLocalStorage() {
-    this.storageService.setObject(PersonService.PersonsStorageKey, this.persons);
-    this.filterPersons(null, false);
-    this.updateData();
+  addPerson(person: Person) {
+    const currentPersons = this.personListSubject.getValue();
+    this.personListSubject.next([...currentPersons, person]);
   }
 
-  importDataFromFile(persons: Person[]) {
-    this.persons = persons;
-    this.updateToLocalStorage();
+  setPerson(persons: Person[]) {
+    this.personListSubject.next(persons);
   }
 
-  addPerson(person : Person): Boolean {
-
-    this.persons.unshift(person);
-    this.updateToLocalStorage();
-    return true;
+  getPersons(): Person[] {
+    return this.personListSubject.getValue();
   }
 
-  updatePerson(id: number | undefined, data: Person) {
-    const index = this.persons.findIndex((person) => person.id === id);
-    this.persons.splice(index, 1, data);
-    this.updateToLocalStorage();
-  }
-
+  // Xóa cá nhân theo ID
   deletePerson(id: number | undefined) {
-    const index = this.persons.findIndex((person) => person.id === id);
-    this.persons.splice(index, 1);
-    this.updateToLocalStorage();
+    if (id === undefined) return;
+    const currentPersons = this.personListSubject.getValue();
+    const updatedPersons = currentPersons.filter(person => person.id !== id);
+    this.personListSubject.next(updatedPersons);
   }
 
-  getPersonByID(id: number | undefined): Observable<Person | null> {
-    let person = this.persons.find((person) => person.id === id) || null;
-    return of(person).pipe(delay(500));
+  // Cập nhật thông tin cá nhân
+  updatePerson(updatedPerson: Person) {
+    const currentPersons = this.personListSubject.getValue();
+    const updatedPersons = currentPersons.map(person =>
+      person.id === updatedPerson.id ? updatedPerson : person
+    );
+    this.personListSubject.next(updatedPersons);
   }
 
-  filterPersons(key: string | null, isFiltering: boolean = true) {
-    this.filteredPersons = [...this.persons];
-    if (isFiltering) {
-      this.updateData();
+  addOrUpdatePerson(person: Person) {
+    const currentPersons = this.personListSubject.getValue();
+    const index = currentPersons.findIndex(p => p.id === person.id);
+    
+    let updatedPersons: Person[];
+    if (index !== -1) {
+      // Đã tồn tại → cập nhật
+      updatedPersons = [...currentPersons];
+      updatedPersons[index] = person;
+    } else {
+      // Không tồn tại → thêm mới
+      updatedPersons = [...currentPersons, person];
     }
+    this.personListSubject.next(updatedPersons);
   }
-
-  private updateData() {
-    this.currentPersonSubject?.next(this.currentPerson);
-    this.personsSubject.next(this.filteredPersons);
-    this.lengthPersonsSubject.next(this.persons.length);
-  }
+  
 }

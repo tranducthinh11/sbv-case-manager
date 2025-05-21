@@ -1,10 +1,13 @@
+import { Common } from "../../service-common/common";
+import { BankInfo } from "./bank-info";
+
 export class BankAccountNumber {
   id!: number | undefined;
   so_tai_khoan!: string;
-  ngan_hang!: string;
+  ngan_hang!: BankInfo;
   loai_tien!: string;
   loai_tai_khoan!: string;
-  ngay_mo!: string;
+  ngay_mo!: Date;
   trang_thai!: string;
 
   constructor(
@@ -15,7 +18,7 @@ export class BankAccountNumber {
     this.ngan_hang = data.ngan_hang;
     this.loai_tien = data.loai_tien;
     this.loai_tai_khoan = data.loai_tai_khoan;
-    this.ngay_mo = data.ngay_mo;
+    this.ngay_mo = Common.convertNgbDateToDate(data.ngay_mo);
     this.trang_thai = data.trang_thai;
   }
 }
