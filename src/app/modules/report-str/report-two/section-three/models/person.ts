@@ -1,26 +1,22 @@
 import { BankAccountNumber } from '../models/bank-account-number';
+import {CurrentResidence } from './current-residence';
+import {PermanentAddress} from "./permanent-address";
+import { Job } from './job';
+import { Common } from '../../service-common/common';
+import { PersonallyIdentifiableInformation } from './personally-identifiable-information';
 
 export class Person {
   id!: number | undefined;
   ho_ten!: string;
-  ngay_sinh!: string;
+  ngay_sinh!: Date;
   do_tuoi!: string;
   gioi_tinh!: string;
   quoc_tich!: string;
-  nghe_nghiep!: string;
+  nghe_nghiep!: Job;
   chuc_vu!: string;
-  dia_chi_quoc_gia!: string;
-  dia_chi_tinh_thanh!: string;
-  dia_chi_quan_huyen!: string;
-  noi_o_quoc_gia!: string;
-  noi_o_tinh_thanh!: string;
-  noi_o_quan_huyen!: string;
-  loai_dinh_danh!: string;
-  so_dinh_danh!: string;
-  co_quan_cap!: string;
-  noi_cap!: string;
-  ngay_cap!: string;
-  ngay_het_han!: string;
+  dia_chi_thuong_tru!: PermanentAddress;
+  noi_o_hien_tai!: CurrentResidence;
+  thong_tin_dinh_danh!: PersonallyIdentifiableInformation[];
   so_dien_thoai!: string;
   tai_khoan!: BankAccountNumber[];
 
@@ -29,25 +25,18 @@ export class Person {
   ) {
     this.id = data.id;
     this.ho_ten = data.ho_ten;
-    this.ngay_sinh = data.ngay_sinh;
+    this.ngay_sinh = Common.convertNgbDateToDate(data.ngay_sinh);
     this.do_tuoi = data.do_tuoi;
     this.gioi_tinh = data.gioi_tinh;
     this.quoc_tich = data.quoc_tich;
     this.nghe_nghiep = data.nghe_nghiep;
     this.chuc_vu = data.chuc_vu;
-    this.dia_chi_quoc_gia = data.dia_chi_quoc_gia;
-    this.dia_chi_tinh_thanh = data.dia_chi_tinh_thanh;
-    this.dia_chi_quan_huyen = data.dia_chi_quan_huyen;
-    this.noi_o_quoc_gia = data.noi_o_quoc_gia;
-    this.noi_o_tinh_thanh = data.noi_o_tinh_thanh;
-    this.noi_o_quan_huyen = data.noi_o_quan_huyen;
-    this.loai_dinh_danh = data.loai_dinh_danh;
-    this.so_dinh_danh = data.so_dinh_danh;
-    this.co_quan_cap = data.co_quan_cap;
-    this.noi_cap = data.noi_cap;
-    this.ngay_cap = data.ngay_cap;
-    this.ngay_het_han = data.ngay_het_han;
+    this.dia_chi_thuong_tru = data.dia_chi_thuong_tru;
+    this.noi_o_hien_tai = data.noi_o_hien_tai;
+    // this.thong_tin_dinh_danh = data.thong_tin_dinh_danh;
+    this.thong_tin_dinh_danh = Array.isArray(data.thong_tin_dinh_danh) ? data.thong_tin_dinh_danh.map((item: any) => new PersonallyIdentifiableInformation(item)) : [];
     this.so_dien_thoai = data.so_dien_thoai;
-    this.tai_khoan = data.tai_khoan;
+    // this.tai_khoan = data.tai_khoan;
+    this.tai_khoan = Array.isArray(data.tai_khoan) ? data.tai_khoan.map((item: any) => new BankAccountNumber(item)) : [];
   }
 }

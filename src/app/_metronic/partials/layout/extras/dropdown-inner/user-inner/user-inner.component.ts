@@ -4,6 +4,7 @@ import { TranslationService } from '../../../../../../modules/i18n';
 import { AuthService, UserType } from '../../../../../../modules/auth';
 import { KeycloakProfile } from 'keycloak-js';
 import { environment } from 'src/environments/environment';
+import { UserRole } from 'src/app/modules/list-str-case/services/user-role.enum';
 
 @Component({
   selector: 'app-user-inner',
@@ -16,6 +17,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   language: LanguageFlag;
   user$: KeycloakProfile | undefined;
+  currentRole$: UserRole;
   langs = languages;
   private unsubscribe: Subscription[] = [];
 
@@ -29,6 +31,9 @@ export class UserInnerComponent implements OnInit, OnDestroy {
     const userProfile = this.auth.getAuthFromLocalStorage();
     this.user$ = this.auth.getAuthFromLocalStorage();
     this.setLanguage(this.translationService.getSelectedLanguage());
+    this.auth.getUserRole().subscribe(role => {
+      this.currentRole$ = role;
+    });
   }
 
   logout() {
@@ -37,6 +42,25 @@ export class UserInnerComponent implements OnInit, OnDestroy {
     } else {
       this.auth.logout();
       document.location.reload();
+    }
+  }
+
+  // fakeRoleToInputer() {
+  //   this.auth.setUserRole(UserRole.INPUTER);
+  // }
+  // fakeRoleToAuthoriser() {
+  //   this.auth.setUserRole(UserRole.AUTHORISER);
+  // }
+  // fakeRoleToRepoter() {
+  //   this.auth.setUserRole(UserRole.REPORTER);
+  // }
+
+  getRoleName() {
+    switch (this.currentRole$) {
+      case UserRole.UNKNOWN: return 'Không xác định';
+      case UserRole.INPUTER: return 'Người nhập thông tin';
+      case UserRole.AUTHORISER: return 'Người kiểm soát';
+      case UserRole.REPORTER: return 'Người phê duyệt ';
     }
   }
 

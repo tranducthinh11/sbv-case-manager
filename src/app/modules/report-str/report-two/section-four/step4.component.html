@@ -1,184 +1,379 @@
-
 <div>
-  <header>
-    <h2 class="modal-title required" id="agency-basic-title">1. Loại báo cáo giao dịch đáng ngờ</h2>
+  <form *ngIf="addStep4Form" [formGroup]="addStep4Form" (ngSubmit)="addStep4Submit()">
+
+    <div>
+      <header>
+        <h2 class="modal-title required" id="agency-basic-title">1. Loại báo cáo giao dịch đáng ngờ</h2>
+        <br>
+      </header>
+
+      <div class="col-lg-12 ms-4">
+        <div class="row mb-6">
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+            <h4 class="modal-title required" id="agency-basic-title">1.1 Loại báo cáo giao dịch đáng ngờ</h4>
+          </label>
+          <div class="col-lg-12 ms-4">
+            <div *ngFor="let item of reportTypes" class="form-check custom-check">
+              <input [disabled]="readOnly" [readOnly]="readOnly" type="checkbox" class="form-check-input"
+                [formControlName]="item.key" id="{{ item.key }}">
+              <label class="form-check-label" for="{{ item.key }}">{{ ' - ' + item.value }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-6">
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+            <h4 class="modal-title required" id="agency-basic-title">1.2 Dấu hiệu đáng ngờ</h4>
+          </label>
+          <div class="col-lg-12 ms-4">
+            <div *ngFor="let item of suspiciousSigns" class="form-check custom-check">
+              <input [disabled]="readOnly" [readOnly]="readOnly" type="checkbox" class="form-check-input"
+                [formControlName]="item.key" id="{{ item.key }}">
+              <label class="form-check-label" for="{{ item.key }}">{{ ' - ' + item.value }}</label>
+            </div>
+            <div *ngIf="isValueOtherOneChecked()" class="d-flex flex-column gap-2 w-100">
+              <h5 class="fw-bold text-primary">
+                Dấu hiệu đáng ngờ khác do đối tượng báo cáo tự xác định
+              </h5>
+              <textarea class="d-flex flex-column form-control" formControlName="noi_dung_khac_dang_ngo"
+                placeholder="Nhập nội dung..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div><br></div>
+
+    <div>
+      <header>
+        <h2 class="modal-title required">2. Thông tin về giao dịch đáng ngờ</h2>
+        <br>
+      </header>
+
+      <div class="col-lg-12 ms-4">
+        <div class="row mb-6">
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+            <h4 class="modal-title required">2.1. Giao dịch đã được thực hiện chưa?</h4>
+          </label>
+          <div class="col-lg-12 ms-4">
+            <div class="row mb-6">
+              <label class="form-check form-check-inline form-check-solid me-5">
+                <input class="form-check-input" type="radio" formControlName="thuc_hien_giao_dich" value="1"
+                  name="thuc_hien_giao_dich" />
+                <span class="fw-bold ps-2 fs-6">Giao dịch đã được thực hiện</span>
+              </label>
+            </div>
+            <div class="row mb-6">
+              <label class="form-check form-check-inline form-check-solid me-5">
+                <input class="form-check-input" type="radio" formControlName="thuc_hien_giao_dich" value="0"
+                  name="thuc_hien_giao_dich" />
+                <span class="fw-bold ps-2 fs-6">Giao dịch chưa được thực hiện</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phần thông tin giao dịch chỉ hiển thị khi thuc_hien_giao_dich là '1' -->
+      <div *ngIf="addStep4Form?.get('thuc_hien_giao_dich')?.value === '1'">
+        <div class="col-lg-12 ms-4">
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+            <h4 class="modal-title required">2.2. Thông tin thêm về giao dịch đáng ngờ</h4>
+          </label>
+          <div class="row">
+            <div class="col-lg-3 d-flex align-items-center">
+              <label class="col-lg-4 col-form-label fw-bold me-2"><span class="required">a. Từ ngày:</span></label>
+              <div class="col-lg-8 flex-grow-1 fv-row">
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="tu_ngay"
+                  #tungay="ngbDatepicker"
+                  (click)="tungay.toggle()"
+                  autocomplete="off"
+                />
+                <div *ngIf="addStep4Form?.get('tu_ngay')?.invalid && addStep4Form?.get('tu_ngay')?.touched"
+                  class="text-danger">
+                  Vui lòng nhập giao dịch từ ngày.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 d-flex align-items-center">
+              <label class="col-lg-4 col-form-label fw-bold me-2"><span class="required">Đến ngày:</span></label>
+              <div class="col-lg-8 flex-grow-1 fv-row">
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="den_ngay"
+                  #denngay="ngbDatepicker"
+                  (click)="denngay.toggle()"
+                  autocomplete="off"
+                />
+                <div *ngIf="addStep4Form?.get('den_ngay')?.invalid && addStep4Form?.get('den_ngay')?.touched"
+                  class="text-danger">
+                  Vui lòng nhập giao dịch đến ngày.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div><br></div>
+
+
+
+          <div>
+            <label class="col-lg-12 col-form-label fw-bold fs-6">
+              <span class="required">b. Số tiền giao dịch:</span>
+            </label>
+          </div>
+          <div class="col-lg-6 fv-row" formArrayName="so_tien_giao_dich">
+            <table class="table table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th style="width: 5%;"></th>
+                  <th style="width: 15%;" class="required">Loại tiền</th>
+                  <th style="width: 15%;" class="required">Tổng số tiền (nguyên tệ)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let transaction of tractionMoneys.controls; let i = index" [formGroupName]="i">
+                  <td style="text-align: center;">
+                    <div *ngIf="!readOnly">
+                      <button class="btn btn-danger btn-sm" (click)="deleteTransactionMoney(i)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <select class="form-select form-select-sm" formControlName="loai_tien">
+                      <option *ngFor="let currency of currencys" [value]="currency.code"
+                        [selected]="currency.code === 'VND'">
+                        {{ currency.code + ' - ' + currency.name }}
+                      </option>
+                    </select>
+                    <div class="text-danger mt-1"
+                      *ngIf="tractionMoneys.controls[i].get('loai_tien')?.invalid && tractionMoneys.controls[i].get('loai_tien')?.touched">
+                      Loại tiền không được để trống
+                    </div>
+                  </td>
+                  <td>
+                    <input class="form-control form-control-sm text-end" formControlName="so_tien" type="number"
+                      placeholder="Số tiền" />
+                    <div class="text-danger mt-1"
+                      *ngIf="tractionMoneys.controls[i].get('so_tien')?.invalid && tractionMoneys.controls[i].get('so_tien')?.touched">
+                      Số tiền không được để trống
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-end mt-3" *ngIf="!readOnly">
+              <button type="button" class="btn btn-success" (click)="addRowTransactionMoney()">Thêm</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 d-flex align-items-center">
+              <label class="col-lg-5 col-form-label fw-bold me-2"><span class="required">c. Tổng số tiền GD (Quy
+                  đổi ra VND):</span></label>
+              <div class="col-lg-8 flex-grow-1 fv-row">
+                <input type="text"
+                       class="form-control form-control-lg form-control-solid text-end"
+                       formControlName="tong_so_tien_giao_dich"
+                       (input)="formatCurrencyInput($event)"
+                       autocomplete="off"
+                />
+                <div
+                  *ngIf="addStep4Form?.get('tong_so_tien_giao_dich')?.invalid && addStep4Form?.get('tong_so_tien_giao_dich')?.touched"
+                  class="text-danger">
+                  Tổng số tiền giao dịch không được để trống.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div><br></div>
+
+    <div>
+      <header>
+        <h2 class="modal-title required">3. Mô tả, phân tích chi tiết lý do báo cáo giao dịch đáng ngờ theo dấu hiệu nêu
+          tại mục 1 phần này</h2>
+        <br>
+      </header>
+
+      <div>
+        <header>
+          <h4 class="modal-title required">a. Mô tả thông tin giao dịch đáng ngờ </h4>
+          <br>
+        </header>
+        <table class="table align-middle table-row-dashed fs-6 gy-5">
+          <thead>
+            <tr>
+              <th class="min-w-50px text-center">Số thứ tự</th>
+              <th>Họ và tên</th>
+              <th>Số định danh</th>
+              <th>Tổng số tiền vào</th>
+              <th>Tổng số giao dịch vào</th>
+              <th>Tổng số tiền ra</th>
+              <th>Tổng số giao dịch ra</th>
+              <th style="padding-left: 30px;">Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let person of displayPerson$ | async; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ person.ten_doi_tuong || '' }}</td>
+              <td>{{ person.so_dinh_danh }}</td>
+              <td>{{ person.tong_so_tien_vao }}</td>
+              <td>{{ person.tong_so_giao_dich_vao || '' }}</td>
+              <td>{{ person.tong_so_tien_ra }}</td>
+              <td>{{ person.tong_so_giao_dich_ra || '' }}</td>
+              <td class="flex gap-4">
+                <button *ngIf="!readOnly" type="button" class="btn btn-light" (click)="editPerson(person)">Sửa</button>
+                <button *ngIf="readOnly" type="button" class="btn btn-light" (click)="editPerson(person)">Chi
+                  tiết</button>
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm" type="button">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="(displayPerson$ | async)?.length === 0">
+              <td colspan="8" class="text-center">Không có dữ liệu.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row d-flex align-items-center">
+          <div *ngIf="!readOnly" class="col-lg-2">
+<!--            <input type="file" class="form-control">-->
+          </div>
+          <div *ngIf="!readOnly" class="col-lg-2">
+<!--            <button class="btn bg-secondary" type="button">File mẫu</button>-->
+          </div>
+          <div class="col-lg-7"></div>
+          <div *ngIf="!readOnly" class="col-lg-1">
+            <button class="btn btn-success" type="button" (click)="createPerson()">Thêm mới</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 py-5">
+        <header>
+          <h4 class="modal-title" id="agency-basic-title">
+            b. Cơ sở hợp lý để nghi ngờ tài sản trong giao dịch liên quan đến các dấu hiệu nêu trên được xác định từ
+            việc
+            xem xét, thu thập và phân tích thông tin theo quy định tại điểm a khoản 1 Điều 26 Luật Phòng, chống rửa
+            tiền:
+          </h4>
+          <br>
+        </header>
+
+        <div class="col-lg-12 d-flex align-items-center">
+          <label class="col-form-label fw-bold me-2">
+            - Thông báo của cơ quan nhà nước có thẩm quyền về việc xác định bị can, bị cáo, người bị kết án:
+          </label>
+          <div class="col-lg-1 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid input-small"
+              placeholder="Nhập số thông báo" formControlName="so_thong_bao" [disabled]="readOnly"
+              [readOnly]="readOnly" />
+          </div>
+        </div>
+
+        <div class="col-lg-12 d-flex align-items-center">
+          <label class=" col-lg-12 col-form-label fw-bold me-2">
+            - Cơ sở hợp lý để nghi ngờ tài sản trong giao dịch là tài sản thuộc quyền sở hữu hoặc có nguồn gốc thuộc
+            quyền
+            sở hữu, quyền kiểm soát của bị can, bị cáo, người bị kết án đó:
+          </label>
+        </div>
+        <textarea type="text" class="form-control form-control-lg form-control-solid" placeholder="Nhập cơ sở nghi ngờ"
+          formControlName="co_so_nghi_ngo" [disabled]="readOnly" [readOnly]="readOnly"></textarea>
+      </div>
+
+      <div class="col-lg-12 py-5">
+        <header>
+          <h4 class="modal-title" id="agency-basic-title">
+            c. Hoặc cơ sở hợp lý để nghi ngờ tài sản trong giao dịch liên quan đến các dấu hiệu nêu trên được xác định
+            từ
+            việc xem xét, thu thập và phân tích thông tin theo quy định tại điểm b khoản 1 Điều 26 Luật Phòng, chống rửa
+            tiền (kết quả phân tích, đánh giá của đối tượng báo cáo đối với khách hàng, giao dịch phải báo cáo):
+          </h4>
+          <br>
+        </header>
+        <div class="col-lg-12 d-flex align-items-center">
+          <label class="col-form-label fw-bold me-2">
+            - Cơ sở nghi ngờ:
+          </label>
+        </div>
+        <textarea type="text" class="form-control form-control-lg form-control-solid" placeholder="Nhập cơ sở nghi ngờ"
+          formControlName="diem_b_co_so_nghi_ngo" [disabled]="readOnly" [readOnly]="readOnly"></textarea>
+      </div>
+    </div>
+
     <br>
-  </header>
-  <div>
-    <div class="row mb-6">
-      <label class="form-check form-check-inline form-check-solid me-5">
-        <input class="form-check-input" type="checkbox" />
-        <span class="fw-bold ps-2 fs-6">a) Báo cáo giao dịch đáng ngờ theo điểm a khoản 1 Điều 26 Luật Phòng, chống rửa tiền</span>
-      </label>
-    </div>
-    <div class="row mb-6">
-      <label class="col-lg-12 col-form-label fw-bold fs-6">
-        <span class="required">b) Báo cáo giao dịch đáng ngờ theo điểm b khoản 1 Điều 26 Luật Phòng, chống rửa tiền </span>
-      </label>
-    </div>
-    <div class="row mb-6">
-      <label class="form-check form-check-inline form-check-solid me-5">
-        <input class="form-check-input" type="checkbox" />
-        <span class="fw-bold ps-2 fs-6">b1) Dấu hiệu đáng ngờ theo khoản nào của các Điều 27, 28, 29, 30, 31, 32 và 33 Luật Phòng, chống rửa tiền: khoản …………… Điều ………… Luật Phòng, chống rửa tiền</span>
-      </label>
-    </div>
-    <div class="row mb-6">
-      <label class="form-check form-check-inline form-check-solid me-5">
-        <input class="form-check-input" type="checkbox" />
-        <span class="fw-bold ps-2 fs-6">b2) Dấu hiệu đáng ngờ khác do đối tượng báo cáo tự xác định</span>
-      </label>
-    </div>
-  </div>
-</div>
 
-<div class="modal-header">
-  <h3 class="modal-title required" id="agency-basic-title">2. Mô tả, phân tích chi tiết lý do báo cáo giao dịch đáng ngờ theo dấu hiệu nêu tại mục 1 phần này</h3>
-  <!-- <button type="button" class="btn-close" aria-label="Close"></button> -->
-</div>
-<div><br><br></div>
-<div class="card-body border-top p-9">
-  <form [formGroup]="addForm" >
-    <div class="row mb-6">
-      <div>
-        <label class="col-lg-12 col-form-label fw-bold fs-6">
-          <span class="required">- Dòng tiền vào liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi có vào tài khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
-        </label>
+    <div>
+      <header>
+        <h2 class="modal-title required" id="agency-basic-title">4. Nhận định về loại tội phạm có thể liên quan đến giao
+          dịch đáng ngờ</h2>
+        <br>
+      </header>
+      <div *ngFor="let item of finalConclusion" class="form-check custom-check">
+        <input [disabled]="readOnly" [readOnly]="readOnly" type="checkbox" class="form-check-input"
+          [formControlName]="item.key" id="{{ item.key }}">
+        <label class="form-check-label" for="{{ item.key }}">{{ ' - ' + item.value }}</label>
       </div>
-      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">  <table class="table table-bordered table-responsive">
-          <thead>
-            <tr>
-              <th style="width: 5%;"></th>
-              <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
-              <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
-              <th style="width: 10%;">Số tài khoản</th>
-              <th style="width: 10%;">Tên ngân hàng chuyển tiền </th>
-              <th style="width: 10%;">Tổng số tiền(Đ/vị: nghìn đồng)</th>
-              <th style="width: 10%;">Tổng số lượng giao dịch</th>
-              <th style="width: 10%;">Khoảng thời gian giao dịch</th>
-              <th style="width: 10%;">Loại tiền</th>
-              <th style="width: 10%;">Nội dung giao dịch</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i"> <td style="text-align: center;">
-                <button class="btn btn-danger btn-sm" >
-                  <i class="fa fa-trash"></i>
-                </button>
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text" placeholder="Số tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="ngan_hang" type="text" placeholder="Ngân hàng" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex justify-content-end mt-3">
-          <button type="button" class="btn btn-success" >Thêm</button>
+      <div *ngIf="isValueOtherTwoChecked()" class="d-flex flex-column gap-2 w-100">
+        <h5 class="fw-bold text-primary">
+          Điền theo tội danh được quy định trong Bộ luật Hình sự hiện hành
+        </h5>
+        <textarea class="d-flex flex-column form-control" formControlName="noi_dung_khac_toi_pham_dang_ngo"
+          placeholder="Nhập nội dung..."></textarea>
+      </div>
+    </div>
+
+    <br>
+
+    <div>
+      <header>
+        <h2 class="modal-title required" id="agency-basic-title">5. Ngày phát hiện giao dịch đáng ngờ</h2>
+        <br>
+      </header>
+      <div class="col-lg-4">
+        <div class="fv-row">
+          <input
+            class="form-control"
+            placeholder="dd/mm/yyyy"
+            [minDate]="minDate"
+            [maxDate]="nowDate"
+            ngbDatepicker
+            formControlName="ngay_phat_hien"
+            #phathien="ngbDatepicker"
+            (click)="phathien.toggle()"
+            autocomplete="off"
+          />
+          <div class="text-danger mt-1"
+               *ngIf="addStep4Form.get('ngay_phat_hien')?.invalid && addStep4Form.get('ngay_phat_hien')?.touched">
+            Ngày phát hiện không được để trống
+          </div>
         </div>
       </div>
     </div>
 
-  </form>
-</div>
-
-<div><br></div>
-
-<div class="card-body border-top p-9">
-  <form [formGroup]="addForm" >
-    <div class="row mb-6">
-      <div>
-        <label class="col-lg-12 col-form-label fw-bold fs-6">
-          <span class="required">- Dòng tiền ra liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi nợ vào tài khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
-        </label>
-      </div>
-      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">  <table class="table table-bordered table-responsive">
-          <thead>
-            <tr>
-              <th style="width: 5%;"></th>
-              <th style="width: 10%;">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
-              <th style="width: 10%;">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
-              <th style="width: 10%;">Số tài khoản</th>
-              <th style="width: 10%;">Tên ngân hàng chuyển tiền </th>
-              <th style="width: 10%;">Tổng số tiền(Đ/vị: nghìn đồng)</th>
-              <th style="width: 10%;">Tổng số lượng giao dịch</th>
-              <th style="width: 10%;">Khoảng thời gian giao dịch</th>
-              <th style="width: 10%;">Loại tiền</th>
-              <th style="width: 10%;">Nội dung giao dịch</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i"> <td style="text-align: center;">
-                <button class="btn btn-danger btn-sm" >
-                  <i class="fa fa-trash"></i>
-                </button>
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text" placeholder="Số tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="ngan_hang" type="text" placeholder="Ngân hàng" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tien" type="text" placeholder="Loại tiền" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-              <td>
-                <input class="form-control form-control-sm" formControlName="loai_tai_khoan" type="text" placeholder="Loại tài khoản" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex justify-content-end mt-3">
-          <button type="button" class="btn btn-success" >Thêm</button>
-        </div>
-      </div>
+    <!-- Footer -->
+    <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+      <button type="button" class="btn btn-light me-3" (click)="onReset()">Hủy bỏ</button>
+      <button type="submit" class="btn btn-primary">Lưu</button>
     </div>
-
-    <div class="modal-footer flex-center mt-5">
-      <button type="reset" id="two-1-cancel" class="btn btn-light me-3">
-        Cancel
-      </button>
-      <button type="submit" id="two-1-submit" class="btn btn-primary">
-        <span class="indicator-label">Submit</span>
-      </button>
-    </div>
-
   </form>
 </div>

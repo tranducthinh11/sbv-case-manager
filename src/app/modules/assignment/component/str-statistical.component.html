@@ -1,0 +1,115 @@
+<div class="card card-flush h-xl-100">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-5">
+        <h3 class="card-title align-items-start flex-column col-lg-3 ">
+            <span class="card-label fw-bolder fs-3 mb-1">{{ type == 1 ? 'STR của tôi' : 'Thông tin tổng quan' }}</span>
+            <span class="text-muted mt-1 fw-bold fs-7">Có tổng số {{countAllSTR}} STR </span>
+        </h3>
+        <div class="col-lg-8 align-items-center fw-bold ">
+            <!--begin::Label-->
+            <!-- <div class="text-muted fs-7 ">Chọn năm</div> -->
+            <!--end::Label-->
+            <!--begin::Select-->
+            <!-- <select class="form-select form-select-transparent text-gray-900 fs-7 lh-1 fw-bold py-0 ps-3 w-auto" data-dropdown-css-class="w-150px" data-placeholder="Select an option"> -->
+            <!-- <select class="form-select form-select-sm mb-3 mb-lg-0" [(ngModel)]="selectedYearValue"
+                (ngModelChange)="onChangeSelectedYear()">
+                <option *ngFor="let year of lstYear" [value]="year">
+                    {{ year }}
+                </option>
+            </select> -->
+            <!--end::Select-->
+
+            <label class="fs-6 form-label fw-bold text-gray-900">Ngày tạo báo cáo</label>
+            <div class="d-flex">
+              <div class="col-lg-5">
+                <input
+                  type="date"
+                  class="form-control form-control-lg  mb-3 mb-lg-0"
+                  placeholder="Ngày tạo"
+                  name="fromDate"
+                />
+              </div>
+
+              <div class="col-lg-1 position-relative">
+                <span class="position-absolute top-25 start-25">đến</span>
+              </div>
+
+              <div class="col-lg-5">
+                <input
+                  type="date"
+                  class="form-control form-control-lg  mb-3 mb-lg-0"
+                  placeholder="Ngày đến"
+                  name="toDate"
+                />
+              </div>
+            </div>
+        </div>
+    </div>
+    <!--begin::Card body-->
+    <div class="card-body py-3">
+        <div class="tab-content">
+            <!-- begin::Tap pane -->
+            <div 
+                class="tab-pane fade show active"
+                [ngClass]=""
+                [id]="">
+
+                <!-- Bảng dữ liệu -->
+                <div class="table-responsive">
+                <table class="table align-middle table-row-dashed fs-6 gy-3">
+                    <thead>
+                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                        <th class="p-0 pb-3 min-w-175px text-start">Trạng thái</th>
+                        <th class="text-center pe-3 min-w-170px">Số lượng</th>
+                        <th class="p-0 pb-3 w-100px text-start">Chi tiết</th>
+                    </tr>
+                    </thead>
+                    <tbody class="fw-bold text-gray-600">
+                    <tr >
+                        <td class="text-gray-900 text-start">Chờ tiếp nhận</td>
+                        <td class="text-center">10</td>
+                        <td class="text-start">
+                            <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px" >
+                                <i class="bi bi-chevron-down fs-2 text-gray-500" (click)="toggleDetail(1)"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr *ngIf="selectedIndex === 1" style="background-color: aliceblue;">
+                        <td colspan="3" style="padding-left: 20%;">
+                            <table class="table align-middle table-row-dashed fs-6 gy-3" style="max-width: 50%; margin: 10px;">
+                                <thead>
+                                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                        <th class="p-0 pb-3 min-w-175px text-start">Họ tên</th>
+                                        <th class="text-center pe-3 min-w-170px">Số lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="fw-bold text-gray-600">
+                                    <tr >
+                                        <td class="text-gray-900 text-start">Đào Xuân Dương</td>
+                                        <td class="text-center">10</td>
+                                    </tr>
+                                    <tr >
+                                        <td class="text-gray-900 text-start">Đào Đức Anh</td>
+                                        <td class="text-center">12</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="text-gray-900 text-start">Đã tiếp nhận</td>
+                        <td class="text-center">5</td>
+                        <td class="text-start">
+                            <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px" >
+                                <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <!-- end::Tap pane -->
+        </div>
+    </div>
+</div>

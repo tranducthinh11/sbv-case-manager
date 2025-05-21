@@ -1,0 +1,71 @@
+<div class="card card-flush h-xl-100">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">{{ type == 1 ? 'STR của tôi' : 'Thông tin tổng quan' }}</span>
+            <span class="text-muted mt-1 fw-bold fs-7">Có tổng số {{countAllSTR}} STR </span>
+        </h3>
+        <div class="d-flex align-items-center fw-bold">
+            <!--begin::Label-->
+            <div class="text-muted fs-7 ">Chọn năm</div>
+            <!--end::Label-->
+            <!--begin::Select-->
+            <!-- <select class="form-select form-select-transparent text-gray-900 fs-7 lh-1 fw-bold py-0 ps-3 w-auto" data-dropdown-css-class="w-150px" data-placeholder="Select an option"> -->
+            <select class="form-select form-select-sm mb-3 mb-lg-0" [(ngModel)]="selectedYearValue"
+                (ngModelChange)="onChangeSelectedYear()">
+                <option *ngFor="let year of lstYear" [value]="year">
+                    {{ year }}
+                </option>
+            </select>
+            <!--end::Select-->
+        </div>
+        <div class="card-toolbar">
+            <ul class="nav">
+                <li class="nav-item" *ngFor="let tab of lstTab">
+                  <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary fw-bolder px-4 me-1"
+                     data-bs-toggle="tab"
+                     [ngClass]="activeClass(tab.key)"
+                     (click)="setTab(tab.key)">
+                    {{ tab.label }}
+                  </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--begin::Card body-->
+    <div class="card-body py-3">
+        <div class="tab-content">
+            <!-- begin::Tap pane -->
+            <div *ngFor="let tab of lstTab"
+                class="tab-pane fade"
+                [ngClass]="activeClass(tab.key)"
+                [id]="tab.key">
+
+                <!-- Bảng dữ liệu -->
+                <div class="table-responsive">
+                <table class="table align-middle table-row-dashed fs-6 gy-3">
+                    <thead>
+                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                        <th class="p-0 pb-3 min-w-175px text-start">{{ tab.label }}</th>
+                        <th class="text-end pe-3 min-w-170px">Số lượng</th>
+                        <th class="p-0 pb-3 w-100px text-end">Xem</th>
+                    </tr>
+                    </thead>
+                    <tbody class="fw-bold text-gray-600">
+                    <tr *ngFor="let record of allListStr">
+                    <td class="text-gray-900">{{ parseInfo(record.info) }}</td>
+                        <td class="text-end">{{ record.count }}</td>
+                        <td class="text-end">
+                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px" (click)="redirectLink(tab.key, record.info)">
+                            <i class="ki-duotone ki-black-right fs-2 text-gray-500"></i>
+                        </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <!-- end::Tap pane -->
+        </div>
+    </div>
+</div>

@@ -1,124 +1,153 @@
 <div>
-  <header>
-    <h2 class="modal-title required" id="agency-basic-title">1. Thông tin về cá nhân liên quan giao dịch</h2>
-    <br>
-  </header>
-  <div>
-    <table class="table align-middle table-row-dashed fs-6 gy-5">
-      <thead>
-        <tr>
-          <th class="min-w-50px text-center">Số thứ tự</th>
-          <th>Họ và tên</th>
-          <th>Ngày sinh</th>
-          <th>Giới tính</th>
-          <th>Số điện thoại</th>
-          <th>Số cmnd/cccd</th>
-          <th style="padding-left: 30px;">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
+  <form *ngIf="addStep3Form" [formGroup]="addStep3Form" (ngSubmit)="addStep3Submit()">
 
-      </tbody>
-      <tbody>
-        <tr *ngFor="let person of displayPerson$ | async; let i = index">
-          <td class="text-center">{{ i + 1 }}</td>
-          <td>{{ person.ho_ten }}</td>
-          <td>{{ person.ngay_sinh }}</td>
-          <td>{{ person.gioi_tinh }}</td>
-          <td>{{ person.so_dien_thoai }}</td>
-          <td>{{ person.so_dinh_danh }}</td>
-          <td class="flex gap-4">
-            <button (click)="editPerson(person)" class="btn btn-light">
-              Edit
-            </button>
-            <button class="btn btn-danger btn-sm" (click)="deletePerson(person.id)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="(displayPerson$ | async)?.length === 0">
-        <tr>
-          <td colspan="7" class="text-center">Không có dữ liệu.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div>
+      <header>
+        <h2 class="modal-title">1. Thông tin về cá nhân liên quan giao dịch</h2>
+        <br>
+      </header>
+      <div>
+        <table class="table align-middle table-row-dashed fs-6 gy-5">
+          <thead>
+            <tr>
+              <th class="text-center">STT</th>
+              <th>Họ và tên</th>
+              <th>Ngày sinh</th>
+              <th>Giới tính</th>
+              <th>Số điện thoại</th>
+              <th>Số giấy tờ</th>
+              <th>SL tài khoản</th>
+              <th class="text-center">Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
 
-  <div class="row d-flex align-items-center">
-    <div class="col-lg-2">
-      <input type="file" class="form-control" id="two-1-button-import" (change)="importPersonFromCSV($event)">
+          </tbody>
+          <tbody>
+            <tr *ngFor="let person of displayPerson$ | async as persons; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ person.ho_ten }}</td>
+              <td>{{ person.ngay_sinh ? (person.ngay_sinh | date:'dd/MM/yyyy') : '' }}</td>
+              <td>{{ getGenderLabel(person.gioi_tinh) }}</td>
+              <td>{{ person.so_dien_thoai }}</td>
+              <td>{{ getIdentificationNumbers(person) }}</td>
+              <td>{{ person.tai_khoan?.length || 0 }}</td>
+              <td class="flex gap-4 text-center">
+                <button *ngIf="!readOnly" type="button" (click)="addOrEditPerson(person)" class="btn btn-light btn-sm me-1" title="Sửa">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button *ngIf="readOnly" type="button" (click)="addOrEditPerson(person)" class="btn btn-light btn-sm">Chi tiết</button>
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm" type="button" (click)="deletePerson(person.id)" title="Xóa">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="(displayPerson$ | async)?.length === 0">
+            <tr>
+              <td colspan="7" class="text-center">Không có dữ liệu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!readOnly" class="row d-flex align-items-center">
+        <div class="col-lg-2">
+          <!-- <input type="file" class="form-control"> -->
+        </div>
+        <div class="col-lg-2">
+          <!-- <button class="btn bg-secondary" type="button" (click)="downloadTemplatePerson()">File Mẫu</button> -->
+        </div>
+        <div class="col-lg-6"></div>
+        <div *ngIf="!readOnly" class="col-lg-2">
+          <button class="btn btn-success f-right" type="button" (click)="addOrEditPerson()">Thêm mới</button>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-2">
-      <button id="two-1-button-template" class="btn bg-secondary" (click)="downloadTemplatePerson()">File Template</button>
-    </div>
-    <div class="col-lg-7"></div>
-    <div class="col-lg-1">
-      <button id="two-1-button-add" class="btn btn-success" (click)="createPerson(1)">Thêm mới</button>
-    </div>
-  </div>
 
-</div>
-<div><br><br><br></div>
-<div>
-  <header>
-    <h2 class="modal-title required" id="agency-basic-title">2. Thông tin về tổ chức liên quan giao dịch</h2>
-    <br>
-  </header>
+    <div><br><br><br></div>
 
-  <div>
-    <table class="table align-middle table-row-dashed fs-6 gy-5">
-      <thead>
-        <tr>
-          <th class="min-w-50px text-center">Số thứ tự</th>
-          <th>Tên tổ chức</th>
-          <th>Giấy phép thành lập</th>
-          <th>MS doanh nghiệp/MS thuế</th>
-          <th>Số điện thoại</th>
-          <th>Trang thông tin điện tử</th>
-          <th style="padding-left: 30px;">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div>
+      <header>
+        <h2 class="modal-title">2. Thông tin về tổ chức liên quan giao dịch</h2>
+        <br>
+      </header>
 
-      </tbody>
-      <tbody>
-        <tr *ngFor="let organization of displayOrganizations$ | async; let i = index">
-          <td class="text-center">{{ i + 1 }}</td>
-          <td>{{ organization.ten_to_chuc }}</td>
-          <td>{{ organization.so_giay_phep }}</td>
-          <td>{{ organization.nghanh_nghe_kinh_doanh }}</td>
-          <td>{{ organization.so_dien_thoai }}</td>
-          <td>{{ organization.nghanh_nghe_kinh_doanh }}</td>
-          <td class="flex gap-4">
-            <button class="btn btn-light">
-              Edit
-            </button>
-            <button class="btn btn-danger btn-sm" >
-              <i class="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="(displayOrganizations$ | async)?.length === 0">
-        <tr>
-          <td colspan="7" class="text-center">Không có dữ liệu.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <div>
+        <table class="table align-middle table-row-dashed fs-6 gy-5">
+          <thead>
+            <tr>
+              <th class="text-center">STT</th>
+              <th>Tên tổ chức</th>
+              <th>Tên viết tắt</th>
+              <th>MS doanh nghiệp/MS thuế</th>
+              <th>Số điện thoại</th>
+              <th>SL tài khoản</th>
+              <th class="text-center">Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
 
-  <div class="row d-flex align-items-center">
-    <div class="col-lg-2">
-      <input type="file" class="form-control" id="two-1-button-import">
+          </tbody>
+          <tbody>
+            <tr *ngFor="let organization of displayOrganizations$ | async as organizations; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ organization.ten_to_chuc }}</td>
+              <td>{{ organization.ten_viet_tat }}</td>
+              <td>{{ organization.ma_so_doanh_nghiep.ma_so }}</td>
+              <td>{{ organization.so_dien_thoai }}</td>
+              <td>{{ organization.tai_khoan?.length || 0 }}</td>
+              <td class="flex gap-4 text-center">
+                <button *ngIf="!readOnly" class="btn btn-light btn-sm me-1" type="button" (click)="addOrEditOrganization(organization)" title="Sửa">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button *ngIf="readOnly" class="btn btn-light btn-sm" type="button" (click)="addOrEditOrganization(organization)">Chi tiết</button>
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm" type="button" (click)="deleteOrganization(organization.id)" title="Xóa">
+                  <i class="fa fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="(displayOrganizations$ | async)?.length === 0">
+            <tr>
+              <td colspan="7" class="text-center">Không có dữ liệu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!readOnly" class="row d-flex align-items-center">
+        <div class="col-lg-2">
+          <!-- <input type="file" class="form-control"> -->
+        </div>
+        <div class="col-lg-2">
+          <!-- <button id="two-1-button-template" class="btn bg-secondary">File Mẫu</button> -->
+        </div>
+        <div class="col-lg-6"></div>
+        <div *ngIf="!readOnly" class="col-lg-2">
+          <button id="two-1-button-add" class="btn btn-success f-right" type="button" (click)="addOrEditOrganization()">Thêm
+            mới</button>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-2">
-      <button id="two-1-button-template" class="btn bg-secondary" >File Template</button>
-    </div>
-    <div class="col-lg-7"></div>
-    <div class="col-lg-1">
-      <button id="two-1-button-add" class="btn btn-success" (click)="createOrganization(1)">Thêm mới</button>
-    </div>
-  </div>
 
+    <div><br><br><br></div>
+    <div>
+      <header>
+        <h2 class="modal-title" id="agency-basic-title">3. Thông tin khác bổ sung</h2>
+        <br>
+      </header>
+      <div class="row d-flex align-items-center">
+        <div class="col-lg-12">
+          <textarea class="form-control" formControlName="thong_tin_khac_bo_sung" rows="3" [disabled]="readOnly"
+            [readOnly]="readOnly"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+      <button type="button" class="btn btn-light me-3" (click)="onReset()">Hủy bỏ</button>
+      <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+  </form>
 </div>

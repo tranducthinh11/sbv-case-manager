@@ -1,0 +1,237 @@
+<div class="modal-header">
+  <h5 class="modal-title">Vui lòng xác nhận thông tin bằng Chữ Ký Số</h5>
+</div>
+<div class="modal-body">
+  <div
+    class="stepper stepper-pills stepper-column d-flex flex-column flex-xl-row flex-row-fluid"
+    id="kt_create_account_stepper"
+  >
+    <!--begin::Aside-->
+    <div
+      class="card d-flex justify-content-center justify-content-xl-start flex-row-auto w-100 w-xl-300px w-xxl-400px me-9"
+    >
+      <div class="card-body px-6 px-lg-10 px-xxl-15 py-20">
+        <div class="stepper-nav">
+          <div
+            class="stepper-item"
+            [ngClass]="{
+              current: currentStep$.value === 1,
+              completed: currentStep$.value > 1
+            }"
+          >
+            <!--begin::Wrapper-->
+            <div class="stepper-wrapper">
+              <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                <i class="stepper-check fas fa-check"></i>
+                <span class="stepper-number">1</span>
+              </div>
+              <!--end::Icon-->
+
+              <!--begin::Label-->
+              <div class="stepper-label">
+                <h3 class="stepper-title">SafeNet và cắm USB</h3>
+
+                <div class="stepper-desc fw-semibold">
+                  Cài đặt phần mềm SafeNet và cắm USB chữ ký số vào máy tính
+                  này.
+                </div>
+              </div>
+              <!--end::Label-->
+            </div>
+            <!--end::Wrapper-->
+
+            <!--begin::Line-->
+            <div class="stepper-line h-40px"></div>
+            <!--end::Line-->
+          </div>
+
+          <div
+            class="stepper-item"
+            [ngClass]="{
+              current: currentStep$.value === 2,
+              completed: currentStep$.value > 2
+            }"
+          >
+            <!--begin::Wrapper-->
+            <div class="stepper-wrapper">
+              <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                <i class="stepper-check fas fa-check"></i>
+                <span class="stepper-number">2</span>
+              </div>
+              <!--end::Icon-->
+
+              <!--begin::Label-->
+              <div class="stepper-label">
+                <h3 class="stepper-title">Nhập Serial</h3>
+                <div class="stepper-desc fw-semibold">
+                  Điền số Serial của token
+                </div>
+              </div>
+              <!--end::Label-->
+            </div>
+            <!--end::Wrapper-->
+
+            <!--begin::Line-->
+            <div class="stepper-line h-40px"></div>
+            <!--end::Line-->
+          </div>
+
+          <div
+            class="stepper-item"
+            [ngClass]="{
+              current: currentStep$.value === 3,
+              completed: currentStep$.value > 3
+            }"
+          >
+            <!--begin::Wrapper-->
+            <div class="stepper-wrapper">
+              <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                <i class="stepper-check fas fa-check"></i>
+                <span class="stepper-number">3</span>
+              </div>
+              <!--end::Icon-->
+
+              <!--begin::Label-->
+              <div class="stepper-label">
+                <h3 class="stepper-title">Kết quả</h3>
+                <div class="stepper-desc fw-semibold">Kiểm tra kết quả ký</div>
+              </div>
+              <!--end::Label-->
+            </div>
+            <!--end::Wrapper-->
+
+            <!--begin::Line-->
+            <div class="stepper-line h-40px"></div>
+            <!--end::Line-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--begin::Aside-->
+
+    <!--begin::Content-->
+    <div class="d-flex flex-row-fluid flex-center bg-body rounded">
+      <form class="py-20 w-100 w-xl-700px px-9" noValidate id="">
+        <div class="current">
+          <ng-container *ngIf="currentStep$.value === 1">
+            <div style="min-height: 500px">
+              <h4>1. Các công cụ cần có:</h4>
+              <br />
+              <h5>a. Token key</h5>
+              <br />
+              <h5>b. Phần mềm hỗ trợ ký sốSBVCAPlugin</h5>
+              <br />
+              <h5>c. Phần mềm quản lý token key SafeNet</h5>
+              <br />
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="currentStep$.value === 2">
+            <div style="min-height: 500px">
+              <div class="card mb-7">
+                <!--begin::Card body-->
+                <div class="card-body">
+                  <div class="row m-1 g-2">
+                    <!--begin::Compact form-->
+                    <div class="">
+                      <!--begin::Input group-->
+                      <div class="row g-4 mb-2 d-flex align-items-center">
+                        <div class="">
+                          <img src="../../../../assets/img/safenet.png" height="350" width="100%" />
+                        </div>
+                        <br />
+                        <div class="col-lg-12">
+                          <label class="fs-6 form-label fw-bold">
+                            Serial Number
+                          </label>
+                          <div class="me-md-2 position-relative">
+                            <i
+                              class="ki-duotone ki-magnifier fs-3 position-absolute top-50 translate-middle ms-6"
+                            >
+                              <span class="path1"></span>
+                              <span class="path2"></span>
+                            </i>
+                            <input
+                              type="text"
+                              class="form-control form-control-solid ps-10"
+                              name="serialcts"
+                              [autofocus]="true"
+                              [(ngModel)]="serialcts"
+                              placeholder="Mã số Serial của token "
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="currentStep$.value === 3">
+            <div style="min-height: 500px">
+              <span>Kiểm tra kết quả</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="d-flex flex-stack pt-10">
+          <div class="mr-2">
+            <ng-container *ngIf="currentStep$.value !== 1">
+              <button
+                type="button"
+                class="btn btn-lg btn-default me-3"
+                (click)="prevStep()"
+              >
+                <app-keenicon name="arrow-left" class="ms-1"></app-keenicon>
+                Quay lại
+              </button>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="currentStep$.value !== formsCount">
+            <div>
+              <!-- <button
+                type="button"
+                class="btn btn-lg btn-warning me-3"
+                (click)="skipSign()"
+              >
+                <span class="indicator-label">
+                  Bỏ qua {{ " " }}
+                  <app-keenicon
+                    name="arrow-right "
+                    class="ms-2 me-0"
+                  ></app-keenicon>
+                </span>
+              </button> -->
+
+              <button
+                type="button"
+                class="btn btn-lg btn-primary me-3"
+                (click)="nextStep()"
+              >
+                <span class="indicator-label">
+                  <ng-container *ngIf="currentStep$.value < formsCount - 1">
+                    Tiếp tục {{ " " }}
+                    <app-keenicon
+                      name="arrow-right "
+                      class="ms-2 me-0"
+                    ></app-keenicon>
+                  </ng-container>
+                  <ng-container *ngIf="currentStep$.value === formsCount - 1">
+                    Hoàn tất
+                  </ng-container>
+                </span>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </form>
+    </div>
+    <!--end::Content-->
+  </div>
+</div>

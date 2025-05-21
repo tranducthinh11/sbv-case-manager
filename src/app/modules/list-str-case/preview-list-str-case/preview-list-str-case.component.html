@@ -1,0 +1,669 @@
+<div>
+  <header>
+    <div class="d-flex flex-center jus">
+      <h3 class="card-title align-items-start flex-column px-6 mt-8">
+        <span class="fw-bolder mb-2 text-gray-900"
+          >Chi tiết {{ strModel?.so_bao_cao ?? "N/A" }}</span
+        >
+        <span class="text-muted fw-bold">
+          - {{ getParseSTRStatus(strModel?.reception_status) }}</span
+        >
+      </h3>
+    </div>
+
+    <div class="p-4 text-end flex-end mx-5 mt-4">
+      
+
+      <!-- button kiểm tra STR -->
+      <button
+        *ngIf="  hasVisibleBtnKiemTra()"
+        (click)="onKiemTraSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-success me-3"
+      >
+        <span class="indicator-label">KIỂM TRA STR</span>
+      </button> 
+
+      <!-- button xác nhân tiếp nhận -->
+      <button
+        *ngIf="  hasVisibleBtnXacNhanTraLai()"
+        (click)="onXacNhanSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-primary me-3"
+      >
+        <span class="indicator-label">XÁC NHẬN TIẾP NHẬN</span>
+      </button>
+
+      <!-- button trả lại STR -->
+      <button
+        *ngIf=" hasVisibleBtnXacNhanTraLai()"
+        (click)="onTraLaiSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-warning me-3"
+      >
+        <span class="indicator-label">TRẢ LẠI STR</span>
+      </button>
+
+      <!-- button LĐ Phòng duyệt -->
+      <button
+        *ngIf=" hasVisibleBtnLDPhong()"
+        (click)="onLDPhongDuyetSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-success me-3"
+      >
+        <span class="indicator-label">LĐ PHÒNG DUYỆT</span>
+      </button>
+
+      <!-- button LĐ Phòng không duyệt -->
+      <button
+        *ngIf=" hasVisibleBtnLDPhong()"
+        (click)="onLDPhongKhongDuyetSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-warning me-3"
+      >
+        <span class="indicator-label">LĐ PHÒNG KHÔNG DUYỆT</span>
+      </button>
+
+      <!-- button LĐ Cục duyệt -->
+      <button
+        *ngIf=" hasVisibleBtnLDCuc()"
+        (click)="onLDCucDuyetSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-success me-3"
+      >
+        <span class="indicator-label">LĐ CỤC DUYỆT</span>
+      </button>
+
+      <!-- button LĐ Phòng không duyệt -->
+      <button
+        *ngIf=" hasVisibleBtnLDCuc()"
+        (click)="onLDCucKhongDuyetSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-warning me-3"
+      >
+        <span class="indicator-label">LĐ CỤC KHÔNG DUYỆT</span>
+      </button>
+
+      <!-- button Cập nhật STR -->
+      <button
+        *ngIf=" hasVisibleBtnCapNhat()"
+        (click)="onCapNhatSubmit()"
+        type="submit"
+        id="two-1-submit"
+        class="btn btn-light-primary me-3"
+      >
+        <span class="indicator-label">CẬP NHẬT STR</span>
+      </button>
+
+      <!-- button xuất báo cáo  -->
+      <button
+        *ngIf=" hasVisibleBtnInPDF()"
+        type="reset"
+        id="two-1-cancel"
+        class="btn me-3"
+        (click)="onPrintPDF()"
+      >
+        <app-keenicon
+          name="folder-down"
+          class="fs-1 text-primary"
+        ></app-keenicon>
+        KẾT XUẤT STR
+      </button>
+
+    </div>
+
+    <div *ngIf=" isDisplayNote" class="text-start flex-start mx-5 mt-4">
+      <!-- Ý KIẾN GỬI ĐTBC -->
+      <div
+        class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6"
+      >
+        <app-keenicon
+          name="message-text-2"
+          class="mt-2 fs-2 text-primary me-4"
+        ></app-keenicon>
+        <div class="d-flex flex-stack flex-grow-1 w-100">
+          <div class="fw-bold w-100">
+            <div class="text-gray-600 w-100">
+              <div href="#" class="fw-bolder mx-4">
+                Ý KIẾN GỬI ĐTBC - {{ currentName?.toUpperCase() }}
+                {{ isRequiredNote ? "(bắt buộc *)" : "" }}:
+              </div>
+              <textarea
+                #messageInput
+                class="form-control form-control-flush w-100"
+                [(ngModel)]="description1"
+                [required]="isRequiredNote"
+                rows="2"
+                data-kt-element="input"
+                placeholder="....."
+                style="max-height: 200px"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- MÔ TẢ -->
+      <div
+        class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6"
+      >
+        <app-keenicon
+          name="message-text-2"
+          class="mt-2 fs-2 text-primary me-4"
+        ></app-keenicon>
+        <div class="d-flex flex-stack flex-grow-1 w-100">
+          <div class="fw-bold w-100">
+            <div class="text-gray-600 w-100">
+              <div href="#" class="fw-bolder mx-4">
+                MÔ TẢ - {{ currentName?.toUpperCase() }}
+                {{ isRequiredDes2 ? "(bắt buộc *)" : "" }}:
+              </div>
+              <textarea
+                #messageInput
+                class="form-control form-control-flush w-100"
+                [(ngModel)]="description2"
+                [required]="isRequiredDes2"
+                rows="2"
+                data-kt-element="input"
+                placeholder="....."
+                style="max-height: 200px"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- NÚT XÁC NHẬN & HỦY -->
+      <div class="text-end">
+        <button
+          *ngIf="isDisplaySecondSubmit"
+          (click)="cancelCurrentPendingTask()"
+          type="submit"
+          id="two-1-submit"
+          class="btn btn-secondary me-3"
+        >
+          <span class="indicator-label">Hủy bỏ</span>
+        </button>
+
+        <button
+          *ngIf="isDisplaySecondSubmit"
+          (click)="submitCurrentPendingTask()"
+          type="submit"
+          id="two-1-submit"
+          class="btn btn-light-primary me-3"
+        >
+          <span class="indicator-label">Xác nhận</span>
+        </button>
+      </div>
+
+      <hr />
+    </div>
+    
+  </header>
+
+  <br />
+  <div class="card mx-4">
+    <div class="card-body">
+      <div
+        class="stepper stepper-links d-flex flex-column align-items-start"
+        id="kt_stepper"
+      >
+        <!-- tab chức năng -->
+        <div class="w-100 flex flex-col d-flex mb-5 mb-5">
+          <div
+            class="w-25 text-center rounded border-primary border border-dashed p-2 stepper-item {{
+              currentStep$.value === 1 ? 'bg-light-primary' : ''
+            }}"
+            style="cursor: pointer"
+            [ngClass]="{
+              current: currentStep$.value === 1,
+              completed: currentStep$.value > 1
+            }"
+            (click)="setStep(1)"
+          >
+            THÔNG TIN CHUNG
+          </div>
+
+          &nbsp;
+
+          <div
+            class="w-25 text-center rounded border-primary border border-dashed p-2 stepper-item {{
+              currentStep$.value === 2 ? 'bg-light-primary' : ''
+            }} "
+            style="cursor: pointer"
+            [ngClass]="{
+              current: currentStep$.value === 2,
+              completed: currentStep$.value > 2
+            }"
+            (click)="setStep(2)"
+          >
+            NỘI DUNG STR
+          </div>
+
+          &nbsp;
+
+          <!-- <div
+            class="w-25 text-center rounded border-primary border border-dashed p-2 stepper-item {{
+              currentStep$.value === 3 ? 'bg-light-primary' : ''
+            }}"
+            style="cursor: pointer"
+            [ngClass]="{
+              current: currentStep$.value === 3,
+              completed: currentStep$.value > 3
+            }"
+            (click)="setStep(3)"
+          >
+            DANH SÁCH FILE
+          </div>
+
+          &nbsp; -->
+
+          <div
+            class="w-25 text-center rounded border-primary border border-dashed p-2 stepper-item {{
+              currentStep$.value === 3 ? 'bg-light-primary' : ''
+            }}"
+            style="cursor: pointer"
+            [ngClass]="{
+              current: currentStep$.value === 3,
+              completed: currentStep$.value > 3
+            }"
+            (click)="setStep(3)"
+          >
+            LỊCH SỬ THAO TÁC
+          </div>
+
+        </div>
+
+        <!-- display content -->
+        <div id="printableContent" class="current w-100">
+          <ng-container *ngIf="currentStep$.value === 1 ">
+            <div class="card-body border-top p-2 w-60 mx-2">
+              <div class="card-body p-2 w-100">
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">Đơn vị báo cáo</label>
+                  <div class="col-lg-8">
+                    <span class="fw-bolder fs-6 text-gray-900">
+                      {{strModel?.report_entity_code ?? "N/A"}} 
+                      - 
+                      {{ strModel?.report_entity_name ?? "N/A" }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">Mẫu báo cáo</label>
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      getParseSTRType(strModel?.str_type)
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">Số báo cáo</label>
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      strModel?.so_bao_cao ?? "N/A"
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">Ngày báo cáo</label>
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      strModel?.ngay_bao_cao | date : "dd/MM/yyyy hh:mm:ss"
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted"
+                    >Trạng thái</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      getParseSTRStatus(strModel?.reception_status)
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted"
+                    >Cán bộ xử lý</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      strModel?.received_by_id ?? "N/A"
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted"
+                    >Mức độ ưu tiên</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">{{
+                      strModel?.priority ?? "N/A"
+                    }}</span>
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">
+                    Điểm trọng số</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">
+                      {{ strModel?.point ?? "N/A" }}</span
+                    >
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">
+                    Kết luận tội phạm</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">
+                      {{ getParseSTRKetLuan( strModel?.ket_luan)}}</span
+                    >
+                  </div>
+                </div>
+
+                <div class="row mb-7">
+                  <label class="col-lg-4 fw-bold text-muted">
+                    Số hồ sơ</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <span class="fw-bold fs-6">
+                      {{ strModel?.case_id ?? "N/A" }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div
+              *ngIf="logResultData?.records?.length"
+              class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6"
+            >
+              <app-keenicon
+                name="artificial-intelligence"
+                class="fs-2  me-4"
+              ></app-keenicon>
+              <div class="d-flex flex-stack flex-grow-1">
+                <div class="fw-bold">
+                  <div class="fs-6 ">
+                    <span  class="fw-bolder"> Cập nhật gần nhất:</span>
+                    <div
+                      *ngFor="
+                        let record of this.logResultData?.records;
+                        index as i;
+                        first as isFirst
+                      "
+                    >
+                      <p *ngIf="isFirst">
+                        <span>
+                          <div class="badge badge-light-info">
+                            {{ record?.logtime | date : 'dd-MM-yyyy hh:mm' }}
+                          </div></span
+                        >
+
+                        <span>
+                          <div class="badge badge-light-info">
+                            {{ parseEventNameToString(record?.strStatus) }}
+                          </div></span
+                        >
+
+                        - {{ record?.description ?? "(mô tả trống)" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </ng-container>
+
+          <ng-container *ngIf="currentStep$.value === 2">
+            <div ngbAccordion #accordion="ngbAccordion">
+              <div ngbAccordionItem="first">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần I- ĐTBC
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top p-9">
+                        <app-step1
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step1>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+
+              <div ngbAccordionItem="second">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần II- CN/TC thực hiện giao dịch
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top fs-sm p-9">
+                        <app-step2
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step2>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+
+              <div ngbAccordionItem="third">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần III-CN/TC liên quan giao dịch
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top fs-sm p-9">
+                        <app-step3
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step3>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+
+              <div ngbAccordionItem="fourth">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần IV- Thông tin GD đáng ngờ
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top p-9">
+                        <app-step4
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step4>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+
+              <div ngbAccordionItem="fifth">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần V-Công việc xử lý
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top p-9">
+                        <app-step5
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step5>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+
+              <div ngbAccordionItem="sixth">
+                <h2 ngbAccordionHeader>
+                  <button class="fw-bolder" ngbAccordionButton>
+                    Phần VI-Tài liệu đính kèm
+                  </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div class="border-top p-9">
+                        <app-step6
+                          [readOnly]="true"
+                          [strReport]="strModel"
+                        ></app-step6>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- <ng-container *ngIf="currentStep$.value === 3"> -->
+            <!-- begin::Item -->
+            <!-- <app-step6
+                [readOnly]="true"
+                [strReport]="strModel"
+              ></app-step6>
+          </ng-container> -->
+
+          <ng-container *ngIf="currentStep$.value === 3">
+            <div>
+              LỊCH SỬ THAO TÁC
+            </div>
+            <div
+              *ngFor="
+                let record of this.logResultData?.records;
+                index as i;
+                first as isFirst
+              "
+              style="width: 50vw"
+              class="d-flex align-items-center mb-8 p-2 border-bottom"
+              id="{{ i }}"
+            >
+             
+                <!-- begin::Bullet -->
+                <span class="bullet bullet-vertical h-40px bg-primary"></span>
+                <!-- end::Bullet -->
+                <!-- begin::Checkbox -->
+                <div style="width: 250px" class="mx-5">
+                  <span class="badge badge-light-primary fs-6 fw-bolder">
+                    {{ parseEventNameToString(record?.event) }}
+                  </span>
+                  <br />
+                  <div class="fw-bolder text-gray-800 fs-6 mx-1">
+                    <div class="symbol me-5">
+                      <span style="font-weight: bold"> {{ record?.pic }}</span>
+                    </div>
+                  </div>
+
+                  <div
+                    style="font-size: small"
+                    class="fw-bolder text-gray-600 fs-6 mx-1"
+                  >
+                    {{ record?.logtime | date : "dd-MM-yyyy hh:mm" }}
+                  </div>
+                </div>
+                <!-- end::Checkbox -->
+                <!-- begin::Description -->
+                <div class="flex-grow-1 ">
+                  <span
+                    style="font-size: small"
+                    class="text-muted text-gray-600 text-hover-primary fw-bolder fs-6"
+                  >
+                    {{
+                      getParseSTRStatus(
+                        record?.strStatus?.split(" - ")[0]?.trim())
+                      
+                    }}
+                    ->
+                    {{
+                      getParseSTRStatus(
+                        record?.strStatus?.split(" - ")[1].trim())
+                      
+                    }}
+                  </span>
+                  <div *ngIf="disableDescription(record?.event)">
+                    <hr style="width:50%;text-align:left;margin-left:0;border:1px ridge rgb(105, 180, 238)">
+                    <span
+                      class="text-gray-800 fw-bold d-block text-truncate w-500px"
+                    >
+                      <custom-lable-with-tooltip
+                        [maxLength]="100"
+                        [label]="record?.description" 
+                        [titleName]="'Ý kiến gửi ĐTBC'"
+                      >
+                      </custom-lable-with-tooltip>
+                    </span>
+                  </div>
+                  
+                  <div *ngIf="disableDescription2(record?.event)">
+                    <hr style="width:50%;text-align:left;margin-left:0;border:1px ridge rgb(105, 180, 238)">
+                    <span
+                      class="text-gray-800 fw-bold d-block text-truncate w-500px"
+                    >
+                      <custom-lable-with-tooltip
+                        [maxLength]="100"
+                        [label]="record?.description2" 
+                        [titleName]="'Mô tả'"
+                      >
+                      </custom-lable-with-tooltip>
+                    </span>
+                  </div>
+                </div>
+          
+              <!-- end::Description -->
+              <div class="text-center align-items-start"></div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer flex-center mt-5">
+    <button
+      (click)="this.close()"
+      type="button"
+      id="two-1-cancel"
+      class="btn btn-light me-3"
+    >
+      Đóng
+    </button>
+  </div>
+</div>

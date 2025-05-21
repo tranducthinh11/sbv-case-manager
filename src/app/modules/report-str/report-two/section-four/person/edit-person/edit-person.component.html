@@ -1,0 +1,454 @@
+<div class="modal-header">
+  <h3 class="modal-title required" id="agency-basic-title">Màn hình dòng tiền cá nhân liên quan đến giao dịch
+  </h3>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+
+<div style="overflow-y: scroll; background-color: white;" class="card-body border-top p-9">
+  <form [formGroup]="editPersonForm" (ngSubmit)="editPersonSubmit()">
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>Chọn người:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <select [disabled]="readOnly" class="form-control form-control-lg form-control-solid"
+                    (change)="onPersonSelect($event)">
+              <option value="">-- Chọn người --</option>
+              <option *ngFor="let person of personList" [value]="person.id">
+                {{ person.ho_ten }} - {{ person.so_dien_thoai }}
+              </option>
+            </select>
+            <div class="text-danger mt-1"
+                 *ngIf="editPersonForm.get('ten_doi_tuong')?.invalid && editPersonForm.get('ten_doi_tuong')?.touched">
+              Bạn phải chọn đối tượng cho dòng tiền giao dịch
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2">
+            <span>a. Họ và tên:</span>
+          </label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Họ và tên"
+                   formControlName="ten_doi_tuong"
+                   [readOnly]="readOnly"/>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>b. Số định danh:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Số định danh" formControlName="so_dinh_danh"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>c. Tổng số tiền vào:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tổng số tiền vào" formControlName="tong_so_tien_vao"/>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>d. Tổng số giao dịch vào:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tổng số giao dịch vào" formControlName="tong_so_giao_dich_vao"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>e. Tổng số tiền ra:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tổng số tiền ra" formControlName="tong_so_tien_ra"/>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>f. Tổng số giao dịch ra:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tổng số giao dịch ra" formControlName="tong_so_giao_dich_ra"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div><br></div>
+
+    <div class="card-body border-top p-9">
+      <div class="row mb-6">
+        <div>
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+                        <span class="required">- Dòng tiền vào liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi
+                            có vào tài
+                            khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+          </label>
+        </div>
+        <div class="col-lg-12 fv-row" formArrayName="dong_tien_vao">
+          <table class="table table-bordered table-responsive">
+            <thead>
+            <tr>
+              <th style="width: 2%;"></th>
+              <th style="width: 6%;" class="required">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+              <th style="width: 5%;" class="required">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+              <th style="width: 5%;" class="required">Số tài khoản</th>
+              <th style="width: 5%;" class="required">Mã ngân hàng chuyển tiền</th>
+              <th style="width: 5%;" class="required">Tên ngân hàng chuyển tiền</th>
+              <th style="width: 5%;" class="required">Loại tiền</th>
+              <th style="width: 5%;" class="required">Tổng số tiền</th>
+              <th style="width: 5%;" class="required">Tổng số tiền quy đổi</th>
+              <th style="width: 5%;" class="required">Tổng số lượng giao dịch</th>
+              <th style="width: 5%;" class="required">Giao dịch từ ngày</th>
+              <th style="width: 5%;" class="required">Giao dịch đến ngày</th>
+              <th style="width: 10%;" class="required">Nội dung giao dịch</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bankAccount of bankAccountIns.controls; let i = index;" [formGroupName]="i">
+              <td style="text-align: center;">
+                <button class="btn btn-danger btn-sm" type="button" (click)="deleteBankIn(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ho_ten_nguon"
+                       type="text" placeholder="Họ và tên"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('ho_ten_nguon').invalid && bankAccountIns.controls[i].get('ho_ten_nguon').touched">
+                  Họ tên không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_dinh_danh_nguon"
+                       type="text" placeholder="Số CMND/ CCCD/ Hộ chiếu"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('so_dinh_danh_nguon').invalid && bankAccountIns.controls[i].get('so_dinh_danh_nguon').touched">
+                  Số định danh không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan_nguon"
+                       type="text" placeholder="Số tài khoản"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('so_tai_khoan_nguon').invalid && bankAccountIns.controls[i].get('so_tai_khoan_nguon').touched">
+                  Số tài khoản không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ma_ngan_hang_nguon"
+                       type="text" placeholder="Mã ngân hàng chuyền tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('ma_ngan_hang_nguon').invalid && bankAccountIns.controls[i].get('ma_ngan_hang_nguon').touched">
+                  Mã ngân hàng không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ten_ngan_hang_nguon"
+                       type="text" placeholder="Tên ngân hàng chuyền tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('ten_ngan_hang_nguon').invalid && bankAccountIns.controls[i].get('ten_ngan_hang_nguon').touched">
+                  Tên ngân hàng không được để trống
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tien">
+                  <option *ngFor="let currency of currencys" [value]="currency.code"
+                          [selected]="currency.code === 'VND'">
+                    {{ currency.code + ' - ' + currency.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('loai_tien').invalid && bankAccountIns.controls[i].get('loai_tien').touched">
+                  Loại tiền không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_tien"
+                       type="number" placeholder="Tổng số tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('tong_so_tien').invalid && bankAccountIns.controls[i].get('tong_so_tien').touched">
+                  Tổng số tiền không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_tien_quy_doi"
+                       type="number" placeholder="Tổng tiền quy đổi"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('tong_so_tien_quy_doi').invalid && bankAccountIns.controls[i].get('tong_so_tien_quy_doi').touched">
+                  Tổng số tiền quy đổi không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_giao_dich"
+                       type="number" placeholder="Tổng số lượng giao dịch"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('tong_so_giao_dich').invalid && bankAccountIns.controls[i].get('tong_so_giao_dich').touched">
+                  Tổng số giao dịch không được để trống
+                </div>
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="giao_dich_tu_ngay"
+                  #intungay="ngbDatepicker"
+                  (click)="intungay.toggle()"
+                  autocomplete="off"
+                />
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('giao_dich_tu_ngay').invalid && bankAccountIns.controls[i].get('giao_dich_tu_ngay').touched">
+                  Giao dịch từ ngày không được để trống
+                </div>
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="giao_dich_den_ngay"
+                  #indenngay="ngbDatepicker"
+                  (click)="indenngay.toggle()"
+                  autocomplete="off"
+                />
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('giao_dich_den_ngay').invalid && bankAccountIns.controls[i].get('giao_dich_den_ngay').touched">
+                  Giao dịch đến ngày không được để trống
+                </div>
+              </td>
+
+              <td>
+                <input class="form-control form-control-sm" formControlName="noi_dung" type="text"
+                       placeholder="Nội dung"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountIns.controls[i].get('noi_dung').invalid && bankAccountIns.controls[i].get('noi_dung').touched">
+                  Nội dung giao dịch không được để trống
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end mt-3">
+            <button *ngIf="!readOnly" type="button" class="btn btn-success" (click)="addRowIn()">Thêm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body border-top p-9">
+      <div class="row mb-6">
+        <div>
+          <label class="col-lg-12 col-form-label fw-bold fs-6">
+                        <span class="required">- Dòng tiền ra liên quan đến cá nhân, tổ chức thực hiện giao dịch (ghi có
+                            vào tài
+                            khoản) (trong trường hợp tài khoản của khách hàng có phát sinh giao dịch):</span>
+          </label>
+        </div>
+        <div class="col-lg-12 fv-row" formArrayName="dong_tien_ra">
+          <table class="table table-bordered table-responsive">
+            <thead>
+            <tr>
+              <th style="width: 2%;"></th>
+              <th style="width: 6%;" class="required">Họ và tên người chuyển tiền/ nộp tiền mặt</th>
+              <th style="width: 5%;" class="required">Số CMND/ CCCD/ Hộ chiếu/ định danh cá nhân</th>
+              <th style="width: 5%;" class="required">Số tài khoản</th>
+              <th style="width: 5%;" class="required">Mã ngân hàng chuyển tiền</th>
+              <th style="width: 5%;" class="required">Tên ngân hàng chuyển tiền</th>
+              <th style="width: 5%;" class="required">Loại tiền</th>
+              <th style="width: 5%;" class="required">Tổng số tiền</th>
+              <th style="width: 5%;" class="required">Tổng số tiền quy đổi</th>
+              <th style="width: 5%;" class="required">Tổng số lượng giao dịch</th>
+              <th style="width: 5%;" class="required">Giao dịch từ ngày</th>
+              <th style="width: 5%;" class="required">Giao dịch đến ngày</th>
+              <th style="width: 10%;" class="required">Nội dung giao dịch</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bankAccount of bankAccountOuts.controls; let i = index;"
+                [formGroupName]="i">
+              <td style="text-align: center;">
+                <button class="btn btn-danger btn-sm" type="button" (click)="deleteBankOut(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ho_ten_dich"
+                       type="text" placeholder="Họ và tên"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('ho_ten_dich').invalid && bankAccountOuts.controls[i].get('ho_ten_dich').touched">
+                  Họ tên không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_dinh_danh_dich"
+                       type="text" placeholder="Số CMND/ CCCD/ Hộ chiếu"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('so_dinh_danh_dich').invalid && bankAccountOuts.controls[i].get('so_dinh_danh_dich').touched">
+                  Số định danh không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan_dich"
+                       type="text" placeholder="Số tài khoản"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('so_tai_khoan_dich').invalid && bankAccountOuts.controls[i].get('so_tai_khoan_dich').touched">
+                  Số tài khoản không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ma_ngan_hang_dich"
+                       type="text" placeholder="Mã ngân hàng chuyền tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('ma_ngan_hang_dich').invalid && bankAccountOuts.controls[i].get('ma_ngan_hang_dich').touched">
+                  Mã ngân hàng không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="ten_ngan_hang_dich"
+                       type="text" placeholder="Tên ngân hàng chuyền tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('ten_ngan_hang_dich').invalid && bankAccountOuts.controls[i].get('ten_ngan_hang_dich').touched">
+                  Tên ngân hàng không được để trống
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tien">
+                  <option *ngFor="let currency of currencys" [value]="currency.code"
+                          [selected]="currency.code === 'VND'">
+                    {{ currency.code + ' - ' + currency.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('loai_tien').invalid && bankAccountOuts.controls[i].get('loai_tien').touched">
+                  Loại tiền không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_tien"
+                       type="number" placeholder="Tổng số tiền"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('tong_so_tien').invalid && bankAccountOuts.controls[i].get('tong_so_tien').touched">
+                  Tổng số tiền không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_tien_quy_doi"
+                       type="number" placeholder="Tổng tiền quy đổi"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('tong_so_tien_quy_doi').invalid && bankAccountOuts.controls[i].get('tong_so_tien_quy_doi').touched">
+                  Tổng số tiền quy đổi không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="tong_so_giao_dich"
+                       type="number" placeholder="Tổng số lượng giao dịch"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('tong_so_giao_dich').invalid && bankAccountOuts.controls[i].get('tong_so_giao_dich').touched">
+                  Tổng số giao dịch không được để trống
+                </div>
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="giao_dich_tu_ngay"
+                  #outtungay="ngbDatepicker"
+                  (click)="outtungay.toggle()"
+                  autocomplete="off"
+                />
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('giao_dich_tu_ngay').invalid && bankAccountOuts.controls[i].get('giao_dich_tu_ngay').touched">
+                  Giao dịch từ ngày không được để trống
+                </div>
+              </td>
+              <td>
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [minDate]="minDate"
+                  [maxDate]="nowDate"
+                  ngbDatepicker
+                  formControlName="giao_dich_den_ngay"
+                  #outdenngay="ngbDatepicker"
+                  (click)="outdenngay.toggle()"
+                  autocomplete="off"
+                />
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('giao_dich_den_ngay').invalid && bankAccountOuts.controls[i].get('giao_dich_den_ngay').touched">
+                  Giao dịch đến ngày không được để trống
+                </div>
+              </td>
+
+              <td>
+                <input class="form-control form-control-sm" formControlName="noi_dung" type="text"
+                       placeholder="Nội dung"/>
+                <div class="text-danger mt-1"
+                     *ngIf="bankAccountOuts.controls[i].get('noi_dung').invalid && bankAccountOuts.controls[i].get('noi_dung').touched">
+                  Nội dung giao dịch không được để trống
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end mt-3">
+            <button *ngIf="!readOnly" type="button" class="btn btn-success" (click)="addRowOut()">Thêm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <header>
+        <h2 class="modal-title required">- Mô tả cụ thể, rõ ràng về các dấu hiệu, nhân tố, tình huống bất thường/đáng ngờ liên
+          quan đến các giao dịch và cá nhân, tổ chức nêu trên</h2>
+        <br>
+      </header>
+      <div class="row d-flex align-items-center">
+        <div class="col-lg-12">
+                    <textarea class="form-control" formControlName="mo_ta_dau_hieu_dong_tien" rows="3"
+                              [disabled]="readOnly" [ariaDisabled]="readOnly"></textarea>
+          <div class="text-danger mt-1"
+               *ngIf="editPersonForm.get('mo_ta_dau_hieu_dong_tien')?.invalid && editPersonForm.get('mo_ta_dau_hieu_dong_tien')?.touched">
+            Bạn phải nhập mô tả cụ thể, rõ ràng về các dấu hiệu, nhân tố, tình huống bất thường/đáng ngờ liên quan đến các giao dịch và cá nhân, tổ chức nêu trên
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+      <button type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+        Hủy bỏ
+      </button>
+      <button type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>

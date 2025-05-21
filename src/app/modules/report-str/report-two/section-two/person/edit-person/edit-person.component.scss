@@ -1,0 +1,39 @@
+.warning-alert,
+.success-alert {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  top: -72px;
+}
+
+.warning-alert {
+  border: 1px solid #ef4444;
+  background-color: #fca5a5;
+}
+
+.success-alert {
+  border: 1px solid #10b981;
+  background-color: #86efac;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table thead th,
+.table tbody td {
+  vertical-align: middle;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+}
+
+button {
+  white-space: nowrap;
+}
+

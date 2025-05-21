@@ -1,0 +1,475 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="agency-basic-title">Thông tin cá nhân liên quan đến giao dịch
+  </h3>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+<div class="card-body border-top p-9">
+  <form [formGroup]="personForm" (ngSubmit)="personSubmit()">
+
+    <div class="col-lg-12 py-3">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2 required"><span>a. Họ và tên:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg" placeholder="Họ và tên"
+              formControlName="ho_ten" />
+              <div class="text-danger mt-1"
+                  *ngIf="personForm.get('ho_ten').invalid && personForm.get('ho_ten').touched">
+                  Họ và tên không được để trống
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold"><span>b. Ngày, tháng, năm sinh:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="dd/mm/yyyy"
+                [minDate]="minDate"
+                [maxDate]="nowDate"
+                ngbDatepicker
+                formControlName="ngay_sinh"
+                #d="ngbDatepicker"
+                (click)="d.toggle()"
+                autocomplete="off"
+              />
+              <div class="input-group-append calendar-icon">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+            <div class="text-danger mt-1"
+              *ngIf="personForm.get('ngay_sinh').invalid && personForm.get('ngay_sinh').touched" >
+              Ngày, tháng, năm sinh phải nhỏ hơn hoặc bằng hiện tại
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-3">
+      <div class="row">
+
+        <label class="col-lg-2 col-form-label fw-bold fs-6">
+          c. Độ tuổi:
+        </label>
+        <div class="col-lg-10 fv-row">
+          <div class="d-flex align-items-center mt-3">
+            <label *ngFor="let range of ageRanges" class="form-check me-3">
+              <input type="radio" class="form-check-input" [value]="range.value" formControlName="do_tuoi" />
+              <span class="form-check-label">{{ range.label }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-3">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>d. Giới tính:</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <div class="d-flex align-items-center ml-2">
+              <label *ngFor="let gender of genders" class="form-check me-5">
+                <input type="radio" class="form-check-input" [value]="gender.value" formControlName="gioi_tinh" />
+                <span class="form-check-label">{{ gender.label }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"><span>đ. Quốc
+              tịch:</span></label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-select form-select-lg fw-bold" formControlName="quoc_tich">
+              <option *ngFor="let country of countries" [value]="country.code">
+                {{ country.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-3">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center" formGroupName="nghe_nghiep">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>e. Nghề nghiệp:</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-select form-select-lg fw-bold ml-2" formControlName="ma_nghe_nghiep"
+              (change)="updateJobDescription($event)">
+              <option *ngFor="let job of jobs" [value]="job.value">
+                {{ job.name }}
+              </option>
+            </select>
+            <div class="text-danger mt-1" *ngIf="personForm.get('nghe_nghiep.ma_nghe_nghiep')?.invalid &&
+                     personForm.get('nghe_nghiep.ma_nghe_nghiep')?.touched">
+              Nghề nghiệp không được để trống
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"><span>g. Chức vụ/vị trí việc làm:</span></label>
+          <div class="col-lg-8 fv-row">
+            <input type="tel" class="form-control form-control-lg"
+              placeholder="Chức vụ/vị trí việc làm" formControlName="chuc_vu" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="dia_chi_thuong_tru">
+      <div class="col-lg-12 py-3 pb-0">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">h. Địa chỉ đăng ký thường
+            trú:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg mb-3 mb-lg-0" placeholder="Số nhà" formControlName="so_nha" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg" placeholder="Quận/Huyện"
+                  formControlName="quan_huyen" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 py-3 pt-0">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6"></label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg" placeholder="Tỉnh/Thành phố"
+                  formControlName="tinh_thanh" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <select class="form-select form-select-lg fw-bold" formControlName="quoc_gia">
+                  <option *ngFor="let country of countries" [value]="country.code">
+                    {{ country.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                     *ngIf="personForm.get('dia_chi_thuong_tru.quoc_gia').invalid && personForm.get('dia_chi_thuong_tru.quoc_gia').touched">
+                  Quốc gia không được để trống
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="noi_o_hien_tai">
+      <div class="col-lg-12 py-3">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">i. Nơi ở hiện tại:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg mb-3 mb-lg-0" placeholder="Số nhà" formControlName="so_nha" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg" placeholder="Quận/Huyện"
+                  formControlName="quan_huyen" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 py-3">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6"></label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg" placeholder="Tỉnh/Thành phố"
+                  formControlName="tinh_thanh" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <select class="form-select form-select-lg fw-bold" formControlName="quoc_gia">
+                  <option *ngFor="let country of countries" [value]="country.code">
+                    {{ country.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                     *ngIf="personForm.get('noi_o_hien_tai.quoc_gia').invalid && personForm.get('noi_o_hien_tai.quoc_gia').touched">
+                  Quốc gia không được để trống
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row py-3">
+      <label class="col-lg-6 col-form-label fw-bold fs-6"><span>k. Danh sách các thông tin định
+          danh:</span></label>
+      <div class="col-lg-12 fv-row" formArrayName="thong_tin_dinh_danh">
+        <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 10%;" class="">Loại định danh</th>
+              <th style="width: 15%;" class="">Số định danh</th>
+              <th style="width: 15%;">Ngày cấp</th>
+              <th style="width: 15%;">Ngày hết hạn</th>
+              <th style="width: 15%;">Cơ quan cấp</th>
+              <th style="width: 15%;">Nơi cấp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let identityNumber of identityNumbers.controls; let i = index;" [formGroupName]="i">
+              <td style="text-align: center;">
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm" (click)="deleteIdentityNumber(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_dinh_danh">
+                  <option *ngFor="let identity of identitys" [value]="identity.value">
+                    {{ identity.name }}
+                  </option>
+                </select>
+                <div class="text-danger mt-1"
+                  *ngIf="identityNumbers.controls[i].get('loai_dinh_danh').invalid && identityNumbers.controls[i].get('loai_dinh_danh').touched">
+                  Loại định danh không được để trống
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_dinh_danh" type="text"
+                  placeholder="Số" />
+                <div class="text-danger mt-1"
+                  *ngIf="identityNumbers.controls[i].get('so_dinh_danh').invalid && identityNumbers.controls[i].get('so_dinh_danh').touched">
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('required')">Số định danh không được để trống</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidCCCD')">CCCD không hợp lệ</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidCMND')">CMND không hợp lệ</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidDinhDanh')">Định danh cá nhân không hợp lệ</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidHC')">Hộ chiếu không hợp lệ</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidCMSQ')">Chứng minh sỹ quan không hợp lệ</span>
+                  <span *ngIf="identityNumbers.controls[i].get('so_dinh_danh').hasError('invalidCMQNCN')">Chứng minh quân nhân chuyên nghiệp không hợp lệ</span>
+                </div>
+              </td>
+              <td>
+                <!-- <input class="form-control form-control-sm" formControlName="ngay_cap" type="date" [max]="todayString"/> -->
+                <div class="input-group">
+                  <input
+                    class="form-control form-control-sm"
+                    placeholder="dd/mm/yyyy"
+                    [minDate]="minDate"
+                    [maxDate]="nowDate"
+                    ngbDatepicker
+                    formControlName="ngay_cap"
+                    #pickerNgayCap="ngbDatepicker"
+                    (click)="pickerNgayCap.toggle()"
+                    autocomplete="off"
+                  />
+                  <!-- <div class="input-group-append calendar-icon">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div> -->
+                </div>
+                <div class="text-danger mt-1"
+                  *ngIf="identityNumbers.controls[i].get('ngay_cap').invalid && identityNumbers.controls[i].get('ngay_cap').touched  && identityNumbers.controls[i].get('ngay_cap').hasError('ngayCapInvalid')">
+                  Ngày cấp phải nhỏ hơn hoặc bằng hiện tại
+                </div>
+              </td>
+              <td>
+                <!-- <input class="form-control form-control-sm" formControlName="ngay_het_han" type="date" [min]="todayString"/> -->
+                <div class="input-group">
+                  <input
+                    class="form-control form-control-sm"
+                    placeholder="dd/mm/yyyy"
+                    [minDate]="nowDate"
+                    [maxDate]="maxDate"
+                    ngbDatepicker
+                    formControlName="ngay_het_han"
+                    #pickerNgayHetHan="ngbDatepicker"
+                    (click)="pickerNgayHetHan.toggle()"
+                    autocomplete="off"
+                  />
+                  <!-- <div class="input-group-append calendar-icon">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div> -->
+                </div>
+                <div class="text-danger mt-1"
+                  *ngIf="identityNumbers.controls[i].get('ngay_het_han').invalid && identityNumbers.controls[i].get('ngay_het_han').touched">
+                  <span *ngIf="identityNumbers.controls[i].get('ngay_het_han').hasError('required')">Bắt buộc nếu Loại định danh là Thị thực nhập cảnh hoặc Giấy tờ có giá trị đi lại quốc tế/ thẻ cư trú</span>
+                  <span *ngIf="identityNumbers.controls[i].get('ngay_het_han').hasError('ngayHetHanInvalid')">Ngày hết hạn phải lớn hơn ngày cấp và ngày hiện tại</span>
+                </div>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="co_quan_cap" type="text"
+                  placeholder="Cơ quan cấp" />
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="noi_cap" type="text"
+                  placeholder="Nơi cấp" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button *ngIf="!readOnly" type="button" class="btn btn-success" (click)="addIdentityNumber()">Thêm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-3">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>l. Số điện thoại liên
+              lạc:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg"
+              placeholder="Số điện thoại liên lạc" formControlName="so_dien_thoai" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row mb-6">
+      <label class="col-lg-6 col-form-label fw-bold fs-6"><span>m. Danh sách các số tài khoản:</span></label>
+      <div class="col-lg-12 fv-row" formArrayName="tai_khoan">
+        <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 15%;" class="">Số tài khoản</th>
+              <th style="width: 10%;" class="">Mã Ngân hàng</th> <!-- Giảm width từ 14% xuống 10% -->
+              <th style="width: 14%;" class="">Tên Ngân hàng</th>
+              <th style="width: 10%;">Loại tiền</th>
+              <th style="width: 15%;">Loại tài khoản</th>
+              <th style="width: 10%;">Ngày mở tài khoản</th>
+              <th style="width: 10%;">Tình trạng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i">
+              <td style="text-align: center;">
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm" (click)="deleteBankAccount(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text"
+                  placeholder="Số tài khoản" />
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.controls[i].get('so_tai_khoan').invalid && bankAccounts.controls[i].get('so_tai_khoan').touched">
+                  Số tài khoản không được để trống
+                </div>
+              </td>
+              <!-- Mã ngân hàng -->
+              <td>
+                <div formGroupName="ngan_hang">
+                  <!-- <input class="form-control form-control-sm" formControlName="ma_ngan_hang" type="text"
+                    placeholder="Mã NH" /> -->
+                    <select class="form-select form-select-sm" formControlName="ma_ngan_hang">
+                      <option *ngFor="let bank of banks" [value]="bank.report_entity_code">
+                        {{ bank.report_entity_code }} - {{ bank.report_entity_name }}
+                      </option>
+                    </select>
+                    <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').invalid &&
+                  bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').touched">
+                      Mã NH không được trống
+                    </div>
+                </div>
+              </td>
+
+              <!-- Tên ngân hàng -->
+              <td>
+                <div formGroupName="ngan_hang">
+                  <input class="form-control form-control-sm" formControlName="ten_ngan_hang" type="text"
+                    placeholder="Tên NH" />
+                  <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').invalid &&
+                    bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').touched">
+                        Tên NH không được trống
+                      </div>
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tien">
+                  <option *ngFor="let currency of currencys" [value]="currency.code"
+                    [selected]="currency.code === 'VND'">
+                    {{ currency.code + ' - ' + currency.name }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="loai_tai_khoan">
+                  <option *ngFor="let type of typeAccounts" [value]="type.value">
+                    {{ type.name }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <!-- <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" [max]="todayString"/> -->
+                <div class="input-group">
+                  <input
+                    class="form-control form-control-sm"
+                    placeholder="dd/mm/yyyy"
+                    [minDate]="minDate"
+                    [maxDate]="nowDate"
+                    ngbDatepicker
+                    formControlName="ngay_mo"
+                    #d="ngbDatepicker"
+                    (click)="d.toggle()"
+                    autocomplete="off"
+                  />
+                  <!-- <div class="input-group-append calendar-icon">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div> -->
+                </div>
+                <div class="text-danger mt-1"
+                  *ngIf="bankAccounts.at(i).get('ngay_mo').invalid && bankAccounts.at(i).get('ngay_mo').touched  && bankAccounts.at(i).get('ngay_mo').hasError('ngayCapInvalid')">
+                  Ngày mở tài khoản phải nhỏ hơn hoặc bằng hiện tại
+                </div>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" formControlName="trang_thai">
+                  <option *ngFor="let type of typeStatus" [value]="type.value">
+                    {{ type.name }}
+                  </option>
+                </select>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button *ngIf="!readOnly" type="button" class="btn btn-success" (click)="addBankAccount()">Thêm</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+      <button type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+        Hủy bỏ
+      </button>
+      <button type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,21 @@
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 150px;
+}
+.info {
+  color: gray;
+}
+
+.btn-template {
+  padding: 0.7rem 1rem !important;
+}
+
+.btn-template:hover ::ng-deep #icon-download span {
+  color: white !important;
+}
+
+.f-right {
+  float: right;
+}

@@ -25,10 +25,11 @@ export class DasBoardService {
         return this.http
           .get<any>(this.resourceUrl + '/dashboard', {headers: headers, params: options, observe: 'response' });
       }
-      getDashBoard1(req?: any): Observable<any> {
+
+      getCaseDashBoard(req?: any, type?: number): Observable<HttpResponse<any>> {
         const options = createRequestOption(req);
         return this.http
-          .get<any>(this.resourceUrl + '/dashboard', {headers: headers, params: options });
+          .get<any>(this.resourceUrl + (type == 1 ? '/case/myDashboard' : '/case/dashboard'), {headers: headers, params: options, observe: 'response' });
       }
-
+      
 }

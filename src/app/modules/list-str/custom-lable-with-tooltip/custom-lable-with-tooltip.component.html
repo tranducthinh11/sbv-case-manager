@@ -1,0 +1,14 @@
+<span style="text-wrap: pretty; overflow: hidden;" 
+data-bs-toggle="tooltip"
+data-bs-placement="top"
+(click)="toggle()"
+ >
+
+ <p *ngIf="!displayAll">
+    {{ (label?.slice(label?.length - maxLength <= 0 ? 0: label?.length - maxLength, label?.length ))  + (label?.length > maxLength? "...": "") }} 
+</p>
+
+<p *ngIf="displayAll">
+    {{label}}
+</p>
+</span>

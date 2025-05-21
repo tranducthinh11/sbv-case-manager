@@ -4,7 +4,8 @@ export class MenuItem {
         public path?: string,
         public icon?: string,
         public child?: MenuItem[],
-        public role?: string[],
+        public role?: any[],
+        public type?: string,
         public active: boolean = false
     ) {}
 }

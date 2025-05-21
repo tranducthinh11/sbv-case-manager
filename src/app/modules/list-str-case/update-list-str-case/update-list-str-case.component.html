@@ -1,0 +1,156 @@
+<div>
+  <header>
+    <div class="d-flex flex-center jus">
+      <h2 class="card-title align-items-start flex-column px-6 mt-8">
+        <span class="fw-bolder mb-2 text-gray-900"
+          > {{isChangeBatch ? "Thay đổi cán bộ xử lý theo lô " : "Cập nhật STR : " + strModel?.so_bao_cao ?? "N/A" }} </span
+        >
+      </h2>
+    </div>
+
+    
+  </header>
+
+  <br />
+  
+  <div class="card mx-4">
+    <div class="card-body">
+      <form cForm [formGroup]="updateForm" class="row m-1 g-2">
+        <!--begin::Compact form-->
+        <div class="">
+          <!--begin::Input group-->
+          <div class="row g-4 mb-8 d-flex align-items-center">
+            <!--begin::Row-->
+
+            <!--begin: Mức độ ưu tiên -->
+            <div class="col-lg-6" *ngIf="!isChangeBatch">
+              <!--begin::Row-->
+              <div class="row g-4">
+                <!--begin::Col-->
+                <div class="col-lg-11">
+                  <label class="fs-6 form-label fw-bold text-gray-900"
+                    >Mức độ ưu tiên</label
+                  >
+                  <!--begin::Select-->
+                  <select
+                    class="form-select "
+                    data-placeholder="In Progress"
+                    name="priority"
+                    formControlName="priority"
+                  >
+                    <option
+                      *ngFor="
+                        let priority of priorityList;
+                        index as i;
+                        first as isFirst
+                      "
+                      value="{{ priority }}"
+                    >
+                      <span [id]=""> {{ priority }} </span>
+                    </option>
+                  </select>
+                  <!--end::Select-->
+                </div>
+                <!--end::Col-->
+              </div>
+            </div>
+            <!-- end: Mức độ ưu tiên -->
+
+            <!--begin: Cán bộ xử lý -->
+            <div class="col-lg-6">
+              <!--begin::Row-->
+              <div class="row g-4">
+                <!--begin::Col-->
+                <div class="col-lg-11">
+                  <label class="fs-6 form-label fw-bold text-gray-900"
+                    >Cán bộ xử lý</label
+                  >
+                  <!--begin::Select-->
+                  <select
+                    class="form-select "
+                    data-placeholder="In Progress"
+                    name="processor"
+                    formControlName="processor"
+                  >
+                    <option
+                      *ngFor="
+                        let str of strUsers;
+                        index as i;
+                        first as isFirst
+                      "
+                      value="{{ str.email}}"
+                    >
+                      <span [id]=""> {{ str.name }} </span>
+                    </option>
+                  </select>
+                  <!--end::Select-->
+                </div>
+                <!--end::Col-->
+              </div>
+            </div>
+            <!-- end: Cán bộ xử lý -->
+          </div>
+          
+            <!--begin::Row-->
+            <div class="row g-4">
+              <!--begin::Col-->
+              <div class="col-lg-11">
+            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+              <app-keenicon
+                name="message-text-2"
+                class="mt-2 fs-2 text-primary me-4"
+              ></app-keenicon>
+              <div class="d-flex flex-stack flex-grow-1 w-100">
+                <div class="fw-bold w-100">
+                  <div class="text-gray-600 w-100">
+                    <div href="#" class="fw-bolder mx-4">
+                      LÝ DO CẬP NHẬT (bắt buộc *):
+                    </div>
+                    <textarea
+                      class="form-control form-control-flush w-100"
+                      formControlName="updateReason"
+                      rows="2"
+                      data-kt-element="input"
+                      placeholder="....."
+                      style="max-height: 200px;"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+         
+            <!-- Mô tả  -->
+            
+
+            <!--end::Row-->
+          
+          
+        </div>
+        <!--end::Compact form-->
+
+        
+      </form>
+    </div>
+  </div>
+  
+  <div class="modal-footer flex-center mt-5">
+    <button
+      (click)="submitCurrentPendingTask()"
+      type="submit"
+      id="two-1-submit"
+      class="btn btn-light-primary me-5"
+    >
+      <span class="indicator-label">Cập nhật</span>
+    </button>
+    <button
+      (click)="cancelCurrentPendingTask()"
+      type="submit"
+      id="two-1-submit"
+      class="btn btn-secondary me-3"
+    >
+      <span class="indicator-label">Hủy bỏ</span>
+    </button>
+  </div>
+</div>

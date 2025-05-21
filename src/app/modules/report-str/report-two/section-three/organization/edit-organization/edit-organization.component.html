@@ -1,0 +1,262 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="agency-basic-title">Màn hìnhthông tin về tổ chức liên quan đến giao dịch
+  </h3>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+<div class="card-body border-top p-9">
+  <form [formGroup]="editFormOrganization" (ngSubmit)="editOrganizationSubmit()">
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>a. Tên đầy đủ của tổ
+              chức:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tên đầy đủ của tổ chức" formControlName="ten_to_chuc" />
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="">b. Tên tiếng nước ngoài (nếu
+              có):</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Tên tiếng nước ngoài" formControlName="ten_tieng_nuoc_ngoai" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>c. Tên viết tắt (nếu có):
+            </span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tên viết tắt"
+                   formControlName="ten_viet_tat" />
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="">h. Ngành nghề kinh doanh
+              chính:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Ngành nghề kinh doanh chính" formControlName="nganh_nghe_kinh_doanh" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div formGroupName="dia_chi">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">h. Địa chỉ:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid
+                    mb-3 mb-lg-0" placeholder="Số nhà" formControlName="so_nha" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Quận/Huyện"
+                       formControlName="quan_huyen" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6"></label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-6 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Tỉnh/Thành phố"
+                       formControlName="tinh_thanh" />
+              </div>
+              <div class="col-lg-6 fv-row">
+                <select class="form-select form-select-solid form-select-lg fw-bold" formControlName="quoc_gia">
+                  <option *ngFor="let country of countries" [value]="country.code">
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="giay_phep_thanh_lap">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">đ. Giấy phép thành lập số:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                       placeholder="Giấy phép thành lập" formControlName="so_giay_phep" />
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="date" class="form-control form-control-lg form-control-solid" placeholder="Ngày cấp"
+                       formControlName="ngay_cap" />
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                       placeholder="Nơi cấp" formControlName="noi_cap" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="ma_so_doanh_nghiep">
+      <div class="col-lg-12 py-5">
+        <div class="row">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">e. MS doanh nghiệp/MS thuế:</label>
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                       placeholder="MS doanh nghiệp/MS thuế" formControlName="ma_so" />
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="date" class="form-control form-control-lg form-control-solid" placeholder="Ngày cấp"
+                       formControlName="ngay_cap" />
+              </div>
+              <div class="col-lg-4 fv-row">
+                <input type="text" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
+                       placeholder="Nơi cấp" formControlName="noi_cap" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 py-5">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span>i. Số điện thoại liên
+              lạc:</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Số điện thoại liên lạc" formControlName="so_dien_thoai" />
+          </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center">
+          <label class="col-lg-4 col-form-label fw-bold me-2"><span class="">k. Địa chỉ trang thông tin điện tử của
+              doanh nghiệp (tổ chức):</span></label>
+          <div class="col-lg-8 flex-grow-1 fv-row">
+            <input type="text" class="form-control form-control-lg form-control-solid"
+                   placeholder="Địa chỉ trang thông tin điện tử" formControlName="website" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-6">
+      <label class="col-lg-2 col-form-label fw-bold fs-6"><span>m. Danh sách các số tài khoản:</span></label>
+      <div class="col-lg-10 fv-row" formArrayName="tai_khoan">
+        <table class="table table-bordered table-responsive">
+          <thead>
+          <tr>
+            <th style="width: 5%;"></th>
+            <th style="width: 15%;" class="">Số tài khoản</th>
+            <th style="width: 10%;" class="">Mã Ngân hàng</th> <!-- Giảm width từ 14% xuống 10% -->
+            <th style="width: 14%;" class="">Tên Ngân hàng</th>
+            <th style="width: 10%;">Loại tiền</th>
+            <th style="width: 10%;">Loại tài khoản</th>
+            <th style="width: 10%;">Ngày mở tài khoản</th>
+            <th style="width: 15%;">Tình trạng</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let bankAccount of bankAccounts.controls; let i = index;" [formGroupName]="i">
+            <td style="text-align: center;">
+              <button *ngIf="!readOnly" class="btn btn-danger btn-sm" type="button" (click)="deleteRow(i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+            <td>
+              <input class="form-control form-control-sm" formControlName="so_tai_khoan" type="text"
+                     placeholder="Số tài khoản" />
+              <div class="text-danger mt-1"
+                   *ngIf="bankAccounts.controls[i].get('so_tai_khoan').invalid && bankAccounts.controls[i].get('so_tai_khoan').touched">
+                Số tài khoản không được để trống
+              </div>
+            </td>
+            <td>
+              <div formGroupName="ngan_hang">
+                <input class="form-control form-control-sm" formControlName="ma_ngan_hang" type="text"
+                       placeholder="Mã NH" />
+              </div>
+              <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').invalid &&
+              bankAccounts.at(i).get('ngan_hang.ma_ngan_hang').touched">
+                Mã NH không được trống
+              </div>
+            </td>
+
+            <!-- Tên ngân hàng -->
+            <td>
+              <div formGroupName="ngan_hang">
+                <input class="form-control form-control-sm" formControlName="ten_ngan_hang" type="text"
+                       placeholder="Tên NH" />
+              </div>
+              <div class="text-danger mt-1" *ngIf="bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').invalid &&
+              bankAccounts.at(i).get('ngan_hang.ten_ngan_hang').touched">
+                Tên NH không được trống
+              </div>
+            </td>
+            <td>
+              <select class="form-select form-select-sm" formControlName="loai_tien">
+                <option *ngFor="let currency of currencys" [value]="currency.code"
+                        [selected]="currency.code === 'VND'">
+                  {{ currency.code + ' - ' + currency.name }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <select class="form-select form-select-sm" formControlName="loai_tai_khoan">
+                <option *ngFor="let type of typeAccounts" [value]="type.value">
+                  {{ type.name }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <input class="form-control form-control-sm" formControlName="ngay_mo" type="date" />
+            </td>
+            <td>
+              <select class="form-select form-select-sm" formControlName="trang_thai">
+                <option *ngFor="let type of typeStatus" [value]="type.value">
+                  {{ type.name }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          <button *ngIf="!readOnly" type="button" class="btn btn-success" (click)="addRow()">Thêm</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+      <button type="reset" id="two-1-cancel" class="btn btn-light me-3">
+        Hủy bỏ
+      </button>
+      <button type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>

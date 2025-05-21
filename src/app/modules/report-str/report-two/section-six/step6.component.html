@@ -1,97 +1,71 @@
-<div class="pb-10 pb-lg-12">
-  <h2 class="fw-bolder text-gray-900">Business Details</h2>
-  <div class="text-gray-500 fw-bold fs-6">
-    OK DONE
-    <a href="#" class="link-primary fw-bolder">Help Page</a>.
+
+<div>
+  <div class="card-body border-top p-9">
+    <form *ngIf="addStep6Form" [formGroup]="addStep6Form" (ngSubmit)="addStep6Submit()">
+      <div>
+        <header>
+          <h2 class="modal-title required">Tài liệu đính kèm</h2>
+          <i class="info">* Tối đa {{maxFileCount}} file đính kèm</i>
+          <br>
+        </header>
+        <div *ngIf="!readOnly" class="row d-flex align-items-center">
+          <!-- <div class="col-lg-2">
+            <input type="file" class="form-control">
+          </div>
+          <div class="col-lg-2">
+            <button class="btn bg-secondary" type="button">File mẫu</button>
+          </div>
+          <div class="col-lg-6"></div> -->
+          <div class="col-lg-12">
+            <button class="btn btn-success f-right" type="button" (click)="addAttachment()">Thêm</button>
+            <button type="button" class="btn btn-light-primary me-1 btn-template f-right" (click)="downloadFile()">
+              <app-keenicon id="icon-download" name="folder-down" class="fs-1 text-primary"></app-keenicon>
+              Mẫu sao kê
+            </button>
+          </div>
+          
+        </div>
+        <table class="table align-middle table-row-dashed fs-6 gy-5">
+          <thead>
+            <tr>
+              <th class="min-w-50px text-center">STT</th>
+              <th>Loại tài liệu</th>
+              <th>Tên tài liệu</th>
+              <th>Số trang</th>
+              <th>Mô tả</th>
+              <th class="text-center">Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let document of getAttachments; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ getAttachmentTypeName(document.attachmentType) }}</td>
+              <td>{{ document.fileName }}</td>
+              <td>{{ document.pageCount }}</td>
+              <td class="ellipsis" title="{{ document.description }}">{{ document.description }}</td>
+              <td class="text-center">
+                <button *ngIf="document.id" class="btn btn-info btn-sm m-1" title="Tải xuống" type="button" (click)="downloadAttachment(document)">
+                  <i class="fa fa-download p-0"></i>
+                </button>
+                <button *ngIf="!readOnly" class="btn btn-danger btn-sm m-1" title="Xóa" type="button" (click)="deleteAttachment(document, i)">
+                  <i class="fa fa-trash p-0"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="getAttachments.length === 0">
+              <td colspan="7" class="text-center">Không có tài liệu nào.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+
+      <!-- Footer -->
+      <div *ngIf="!readOnly" class="modal-footer flex-center mt-5">
+        <button type="button" class="btn btn-light me-3" (click)="clearAttachment()">Hủy bỏ</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+      </div>
+    </form>
   </div>
 </div>
-<!-- <div [formGroup]="form">
-  <div class="fv-row mb-10">
-    <label class="form-label required">Business Name</label
-    ><input
-      name="businessName"
-      class="form-control form-control-lg form-control-solid"
-      formControlName="businessName"
-    />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('businessName')?.hasError('required') &&
-        form.get('businessName')?.touched
-      "
-    >
-      Business Name is required
-    </div>
-  </div>
-  <div class="fv-row mb-10">
-    <label class="d-flex align-items-center form-label"
-      ><span class="required">Shortened Descriptor</span></label
-    ><input
-      name="businessDescriptor"
-      class="form-control form-control-lg form-control-solid"
-      formControlName="businessDescriptor"
-    />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('businessDescriptor')?.hasError('required') &&
-        form.get('businessDescriptor')?.touched
-      "
-    >
-      Shortened Descriptor is required
-    </div>
-    <div class="form-text">
-      Customers will see this shortened version of your statement descriptor
-    </div>
-  </div>
-  <div class="fv-row mb-10">
-    <label class="form-label required">Corporation Type</label
-    ><select
-      name="businessType"
-      class="form-select form-select-lg form-select-solid"
-      formControlName="businessType"
-    >
-      <option value="1">S Corporation</option>
-      <option value="1">C Corporation</option>
-      <option value="2">Sole Proprietorship</option>
-      <option value="3">Non-profit</option>
-      <option value="4">Limited Liability</option>
-      <option value="5">General Partnership</option>
-    </select>
-  </div>
-  <div class="fv-row mb-10">
-    <label class="form-label">Business Description</label
-    ><textarea
-      name="businessDescription"
-      class="form-control form-control-lg form-control-solid"
-      rows="3"
-      formControlName="businessDescription"
-    ></textarea>
-  </div>
-  <div class="fv-row mb-0">
-    <label class="fs-6 fw-bold form-label required">Contact Email</label
-    ><input
-      name="businessEmail"
-      class="form-control form-control-lg form-control-solid"
-      formControlName="businessEmail"
-    />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('businessEmail')?.hasError('required') &&
-        form.get('businessEmail')?.touched
-      "
-    >
-      Contact Email is required
-    </div>
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('businessEmail')?.hasError('email') &&
-        form.get('businessEmail')?.touched
-      "
-    >
-      Wrong email format
-    </div>
-  </div>
-</div> -->
+

@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="agency-basic-title">Danh sách người được ủy quyền của tài khoản cá nhân</h3>
+  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+</div>
+
+<div class="card-body border-top p-9">
+  <form [formGroup]="viewAuthorizedPerson" (ngSubmit)="submitAuthorizedPerson()">
+
+    <div class="container mt-3">
+      <div *ngIf="authorizedPersons.length > 0; else noData">
+        <table class="table table-hover table-bordered">
+          <thead class="table-dark">
+          <tr>
+            <th>Số thứ tự</th>
+            <th>Họ và tên</th>
+            <th>Thông tin định danh</th>
+            <th>Tùy chọn</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let person of authorizedPersons; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ person.ho_ten }}</td>
+            <td>
+              <ul class="list-group">
+                <li class="list-group-item"
+                    *ngFor="let info of person.thong_tin_dinh_danh">
+                  <strong>Loại:</strong> {{ getLoaiDinhDanhText(info.loai_dinh_danh) }} |
+                  <strong>Số:</strong> {{ info.so_dinh_danh }} |
+                  <strong>Ngày cấp:</strong> {{ info.ngay_cap | date:'dd/MM/yyyy' }} |
+                  <strong>Ngày hết hạn:</strong> {{ info.ngay_het_han | date:'dd/MM/yyyy' }} |
+                  <strong>Cơ quan cấp:</strong> {{ info.co_quan_cap }} |
+                  <strong>Nơi cấp:</strong> {{ info.noi_cap }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <button *ngIf="!readOnly" class="btn btn-sm btn-primary" type="button" (click)="openEditModal(person, i)">Sửa</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noData>
+        <div class="alert alert-warning text-center mt-4">
+          <strong>Không có người được ủy quyền nào.</strong>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="modal-footer flex-center mt-5">
+      <button *ngIf="!readOnly" type="button" id="two-1-cancel" class="btn btn-light me-3" (click)="onReset()">
+        Hủy bỏ
+      </button>
+      <button *ngIf="!readOnly" type="submit" id="two-1-submit" class="btn btn-primary">
+        <span class="indicator-label">Lưu</span>
+      </button>
+    </div>
+
+  </form>
+</div>
