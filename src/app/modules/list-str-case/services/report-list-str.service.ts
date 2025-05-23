@@ -147,6 +147,16 @@ export class STRReportListSTRService {
     );
   }
 
+  onPrintExcelCase(recordId: string) {
+    return this.http.get(
+      `${this.apiUrl}/list-case/exportExcel?id=${recordId}`,
+      { headers: this.getHeader(),
+        responseType: 'blob' // Quan trọng: Chỉ định responseType là 'blob'
+       }
+      
+    );
+  }
+
   checkCurrentInfo() {
     return this.http.get(`${this.apiUrl}/report-list/getClientInfo`, {
       headers: this.getHeader(),

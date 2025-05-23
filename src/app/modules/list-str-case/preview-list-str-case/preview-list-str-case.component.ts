@@ -140,7 +140,7 @@ export class PreviewListSTRCaseComponent implements OnInit {
         && (x.role == UserRole.ANALYST
             || x.role == UserRole.DIRECTOR
             || x.role == UserRole.MANAGER
-            ) )
+            ))
     );
   }
 
@@ -171,6 +171,20 @@ export class PreviewListSTRCaseComponent implements OnInit {
     
   }
 
+  hasVisibleBtnInDocxCase() {
+    return (
+      this.strUsers?.some(x => x.email == this.currentUserProfile.email 
+        && (x.role == UserRole.ANALYST
+            || x.role == UserRole.DIRECTOR
+            || x.role == UserRole.MANAGER
+            ) )
+            && (this.strModel?.reception_status == 'DA_TIEP_NHAN' 
+                || this.strModel?.reception_status == 'DA_TAO_HO_SO'
+                || this.strModel?.reception_status == 'HOAN_THANH'
+            )
+    );
+  }
+
   onPrintDocxCase() {
     this.isPrinting = true;
     this.currentStep$.next(2);
@@ -188,6 +202,49 @@ export class PreviewListSTRCaseComponent implements OnInit {
         document.body.appendChild(link);
         link.click();
         // Dọn dẹp
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Lỗi khi tải file:', err);
+      },
+    });
+    
+  }
+
+  hasVisibleBtnInExcelCase() {
+    return (
+      this.strUsers?.some(x => x.email == this.currentUserProfile.email 
+        && (x.role == UserRole.ANALYST
+            || x.role == UserRole.DIRECTOR
+            || x.role == UserRole.MANAGER
+            ) )
+    );
+  }
+
+  onPrintExcelCase() {
+    this.isPrinting = true;
+    this.currentStep$.next(2);
+    const content = document.getElementById('printableContent');
+    if (!content) return;
+
+    this.strReportListSTRService.onPrintExcelCase(this.strModel?.id).subscribe({
+      next: (response: Blob) => {
+        // Tạo URL từ Blob
+        const blob = new Blob([response], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+      
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'template.xlsx';
+      
+        // Thêm vào DOM và click để tải
+        document.body.appendChild(link);
+        link.click();
+      
+        // Cleanup
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       },
